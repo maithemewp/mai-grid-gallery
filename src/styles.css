@@ -1,0 +1,7 @@
+@import 'glightbox/dist/css/glightbox.min.css';
+@import './main.css';
+
+.gbtn {
+	padding: 0 !important;
+	border-radius: var(--button-border-radius, var(--border-radius, 3px)) !important;
+}

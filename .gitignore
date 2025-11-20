@@ -1,0 +1,15 @@
+# Dependencies
+/node_modules
+
+# Environment files
+.env
+
+# Editor files
+.DS_Store
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*

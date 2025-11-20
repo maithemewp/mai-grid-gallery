@@ -1,0 +1,23 @@
+{
+	"apiVersion": 3,
+	"name": "mai/grid-gallery",
+	"title": "Mai Grid Gallery",
+	"description": "A responsive, stylish, and lightweight grid gallery with lightbox support",
+	"category": "media",
+	"icon": "grid-view",
+	"keywords": [ "gallery", "grid", "images", "video", "lightbox" ],
+	"textdomain": "mai-grid-gallery",
+	"supports": {
+		"align": [ "wide", "full" ],
+		"html": false
+	},
+	"attributes": {
+		"focalPoints": {
+			"type": "object",
+			"default": {}
+		}
+	},
+	"editorScript": "file:../build/editor.js",
+	"editorStyle": "file:../build/editor-styles.css",
+	"viewScript": "file:../build/frontend.js"
+}

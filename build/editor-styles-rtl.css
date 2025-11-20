@@ -1,0 +1,216 @@
+/*!******************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/main.css ***!
+  \******************************************************************************************************************************************************************/
+.wp-block-mai-grid-gallery {
+	display: grid;
+	gap: 8px;
+
+	> * {
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		border-radius: var(--image-border-radius, var(--border-radius, 0));
+		overflow: hidden;
+
+		div {
+			width: 100% !important;
+			height: 100% !important;
+			max-width: unset !important;
+			max-height: unset !important;
+		}
+
+		img {
+			display: block !important;
+			width: 100% !important;
+			height: 100% !important;
+			-o-object-position: var(--object-position, 50% 50%) !important;
+			   object-position: var(--object-position, 50% 50%) !important;
+		}
+	}
+
+	img,
+	video {
+		display: block;
+		width: 100%;
+		height: 100%;
+		-o-object-fit: cover;
+		   object-fit: cover;
+	}
+
+	/**
+	 * We shouldn't be allowed to add links,but for now if someone does,
+	 * this will make sure it doesn't bork the styling.
+	 */
+	.wp-block-image a {
+		display: contents;
+	}
+
+	.components-resizable-box__handle  {
+		display: none !important;
+	}
+}
+
+.wp-block-mai-grid-gallery {
+	aspect-ratio: 2/1;
+	grid-template-columns: repeat(24,1fr);
+	grid-template-rows: repeat(12,1fr);
+
+	> * {
+		grid-column: span 4 / auto;
+		grid-row: span 4 / auto
+	}
+
+	/* 3 items */
+	&:has(>:nth-of-type(2):last-of-type) {
+		>:first-of-type,
+		>:nth-of-type(2) {
+			grid-column: span 12 / auto;
+			grid-row: span 12 / auto;
+		}
+	}
+
+	/* 3 items */
+	&:has(>:nth-of-type(3):last-of-type) {
+		>:first-of-type,
+		>:nth-of-type(2),
+		>:nth-of-type(3) {
+			grid-column: span 8 / auto;
+			grid-row: span 12 / auto;
+		}
+	}
+
+	/* 4 items */
+	&:has(>:nth-of-type(4):last-of-type) {
+		>:first-of-type {
+			grid-column: span 12 / auto;
+			grid-row: span 12 / auto;
+		}
+
+		>:nth-of-type(2) {
+			grid-column: span 12 / auto;
+			grid-row: span 7 / auto;
+		}
+
+		>:nth-of-type(3),
+		>:nth-of-type(4) {
+			grid-column: span 6 / auto;
+			grid-row: span 5 / auto;
+		}
+	}
+
+	/* 5 items */
+	&:has(>:nth-of-type(5):last-of-type) {
+		>:first-of-type {
+			grid-column: span 12 / auto;
+			grid-row: span 12 / auto;
+		}
+
+		>:nth-of-type(2),
+		>:nth-of-type(4) {
+			grid-column: span 6 / auto;
+			grid-row: span 7 / auto;
+		}
+
+		>:nth-of-type(3),
+		>:nth-of-type(5) {
+			grid-column: span 6 / auto;
+			grid-row: span 5 / auto;
+		}
+	}
+
+	/* 6 items */
+	&:has(>:nth-of-type(6):last-of-type) {
+		>:first-of-type {
+			grid-column: span 12 / auto;
+			grid-row: span 12 / auto;
+		}
+
+		>:nth-of-type(2),
+		>:nth-of-type(5) {
+			grid-column: span 6 / auto;
+			grid-row: span 6 / auto;
+		}
+
+		>:nth-of-type(3),
+		>:nth-of-type(4),
+		>:nth-of-type(6) {
+			grid-column: span 6 / auto;
+			grid-row: span 4 / auto;
+		}
+	}
+
+	/* 7 items */
+	&:has(>:nth-of-type(7):last-of-type) {
+		>:first-of-type {
+			grid-column: span 8 / auto;
+			grid-row: span 12 / auto;
+		}
+
+		>:nth-of-type(2) {
+			grid-column: span 8 / auto;
+			grid-row: span 6 / auto;
+		}
+
+		>:nth-of-type(3) {
+			grid-column: span 8 / auto;
+			grid-row: span 4 / auto;
+		}
+
+		>:nth-of-type(4) {
+			grid-column: span 8 / auto;
+			grid-row: span 4 / auto;
+		}
+
+		>:nth-of-type(5) {
+			grid-column: span 8 / auto;
+			grid-row: span 6 / auto;
+		}
+	}
+
+	/* 8 items */
+	&:has(>:nth-of-type(8):last-of-type) {
+		>:first-of-type {
+			grid-column: span 8 / auto;
+			grid-row: span 12 / auto;
+		}
+
+		>:nth-of-type(2) {
+			grid-column: span 8 / auto;
+			grid-row: span 6 / auto;
+		}
+
+		>:nth-of-type(3) {
+			grid-column: span 8 / auto;
+			grid-row: span 4 / auto;
+		}
+
+		>:nth-of-type(6) {
+			grid-column: span 8 / auto;
+			grid-row: span 6 / auto;
+		}
+	}
+}
+
+/*!***************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/editor-styles.css ***!
+  \***************************************************************************************************************************************************************************/
+.wp-block-mai-grid-gallery {
+	position: relative;
+
+	figcaption {
+		position: absolute;
+		bottom: 8px;
+		right: 8px;
+		left: 8px;
+		width: calc(100% - 16px);
+		margin: 0;
+		padding: 4px;
+		background: rgba(255, 255, 255, 0.75);
+		color: rgba(0, 0, 0, 0.75);
+		border-top-right-radius: 2px;
+		border-top-left-radius: 2px;
+		border-bottom-right-radius: 5px;
+		border-bottom-left-radius: 5px;
+	}
+}
+
