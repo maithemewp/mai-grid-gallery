@@ -6,7 +6,7 @@ import { useBlockProps, useInnerBlocksProps, InnerBlocks, InspectorControls } fr
 import { gallery as icon } from '@wordpress/icons';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { FocalPointPicker } from '@wordpress/components';
+import { FocalPointPicker, SelectControl } from '@wordpress/components';
 import { useState, cloneElement } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -23,7 +23,7 @@ import metadata from '../block/block.json';
 registerBlockType('mai/grid-gallery', {
 	...metadata,
 	icon,
-	edit: () => {
+	edit: ({ attributes, setAttributes }) => {
 		const blockProps = useBlockProps();
 		const pluginUrl = window.maiGridGalleryVars?.pluginUrl.replace(/\/?$/, '/'); // Ensure trailing slash
 
@@ -78,7 +78,25 @@ registerBlockType('mai/grid-gallery', {
 			max: 6
 		});
 
-		return <div {...innerBlocksProps} />;
+		// Max visible options (0-8)
+		const maxVisibleOptions = Array.from({ length: 9 }, (_, i) => ({
+			label: i === 0 ? __('Image count (max 8)') : i.toString(),
+			value: i.toString()
+		}));
+
+		return (
+			<>
+				<InspectorControls>
+					<SelectControl
+						label={__('Max Visible')}
+						value={attributes.maxVisible?.toString() || '0'}
+						options={maxVisibleOptions}
+						onChange={(value) => setAttributes({ maxVisible: parseInt(value, 10) })}
+					/>
+				</InspectorControls>
+				<div {...innerBlocksProps} />
+			</>
+		);
 	},
 	save: () => {
 		const blockProps = useBlockProps.save();
@@ -96,9 +114,9 @@ registerBlockType('mai/grid-gallery', {
  */
 addFilter(
 	'blocks.registerBlockType',
-	'mai/image-focal-point-attribute',
+	'mai-grid-gallery/image-focal-point-attribute',
 	(settings, name) => {
-		if (name !== 'core/image') {
+		if ('core/image' !== name) {
 			return settings;
 		}
 
@@ -124,10 +142,10 @@ addFilter(
  */
 addFilter(
 	'editor.BlockEdit',
-	'mai/with-focal-point-picker',
+	'mai-grid-gallery/with-focal-point-picker',
 	createHigherOrderComponent((BlockEdit) => (props) => {
 		// Only process core/image blocks
-		if (props.name !== 'core/image') {
+		if ('core/image' !== props.name) {
 			return <BlockEdit {...props} />;
 		}
 
@@ -192,9 +210,9 @@ addFilter(
  */
 addFilter(
 	'blocks.getSaveElement',
-	'mai/apply-focal-point',
+	'mai-grid-gallery/apply-focal-point',
 	(element, blockType, attributes) => {
-		if (blockType.name !== 'core/image') {
+		if ('core/image' !== blockType.name) {
 			return element;
 		}
 
@@ -219,10 +237,10 @@ addFilter(
  */
 addFilter(
 	'editor.BlockListBlock',
-	'mai/with-focal-point-styles',
+	'mai-grid-gallery/with-focal-point-styles',
 	createHigherOrderComponent((BlockListBlock) => {
 		return (props) => {
-			if (props.name !== 'core/image') {
+			if ('core/image' !== props.name) {
 				return <BlockListBlock {...props} />;
 			}
 

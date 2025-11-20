@@ -8,7 +8,7 @@
   \**************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"mai/grid-gallery","title":"Mai Grid Gallery","description":"A responsive, stylish, and lightweight grid gallery with lightbox support","category":"media","icon":"grid-view","keywords":["gallery","grid","images","video","lightbox"],"textdomain":"mai-grid-gallery","supports":{"align":["wide","full"],"html":false},"attributes":{"focalPoints":{"type":"object","default":{}}},"editorScript":"file:../build/editor.js","editorStyle":"file:../build/editor-styles.css","viewScript":"file:../build/frontend.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"mai/grid-gallery","title":"Mai Grid Gallery","description":"A responsive, stylish, and lightweight grid gallery with lightbox support","category":"media","icon":"grid-view","keywords":["gallery","grid","images","video","lightbox"],"textdomain":"mai-grid-gallery","supports":{"align":["wide","full"],"html":false,"dimensions":{"aspectRatio":true}},"attributes":{"focalPoints":{"type":"object","default":{}},"maxVisible":{"type":"number","default":0}},"editorScript":"file:../build/editor.js","editorStyle":"file:../build/editor-styles.css","viewScript":"file:../build/frontend.js"}');
 
 /***/ }),
 
@@ -276,7 +276,10 @@ __webpack_require__.r(__webpack_exports__);
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)('mai/grid-gallery', {
   ..._block_block_json__WEBPACK_IMPORTED_MODULE_8__,
   icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__["default"],
-  edit: () => {
+  edit: ({
+    attributes,
+    setAttributes
+  }) => {
     const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)();
     const pluginUrl = window.maiGridGalleryVars?.pluginUrl.replace(/\/?$/, '/'); // Ensure trailing slash
 
@@ -319,8 +322,27 @@ __webpack_require__.r(__webpack_exports__);
       templateLock: false,
       max: 6
     });
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-      ...innerBlocksProps
+
+    // Max visible options (0-8)
+    const maxVisibleOptions = Array.from({
+      length: 9
+    }, (_, i) => ({
+      label: i === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Image count (max 8)') : i.toString(),
+      value: i.toString()
+    }));
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.SelectControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Max Visible'),
+          value: attributes.maxVisible?.toString() || '0',
+          options: maxVisibleOptions,
+          onChange: value => setAttributes({
+            maxVisible: parseInt(value, 10)
+          })
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        ...innerBlocksProps
+      })]
     });
   },
   save: () => {
@@ -336,8 +358,8 @@ __webpack_require__.r(__webpack_exports__);
  * Add focal point attribute to core/image block
  * This allows us to store the focal point coordinates for each image
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.registerBlockType', 'mai/image-focal-point-attribute', (settings, name) => {
-  if (name !== 'core/image') {
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.registerBlockType', 'mai-grid-gallery/image-focal-point-attribute', (settings, name) => {
+  if ('core/image' !== name) {
     return settings;
   }
   return {
@@ -360,9 +382,9 @@ __webpack_require__.r(__webpack_exports__);
  * Add Focal Point Picker to image blocks within our gallery
  * This adds the UI control in the block sidebar for adjusting focal points
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('editor.BlockEdit', 'mai/with-focal-point-picker', (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.createHigherOrderComponent)(BlockEdit => props => {
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('editor.BlockEdit', 'mai-grid-gallery/with-focal-point-picker', (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.createHigherOrderComponent)(BlockEdit => props => {
   // Only process core/image blocks
-  if (props.name !== 'core/image') {
+  if ('core/image' !== props.name) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(BlockEdit, {
       ...props
     });
@@ -430,8 +452,8 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Apply focal point styles to saved HTML
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.getSaveElement', 'mai/apply-focal-point', (element, blockType, attributes) => {
-  if (blockType.name !== 'core/image') {
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.getSaveElement', 'mai-grid-gallery/apply-focal-point', (element, blockType, attributes) => {
+  if ('core/image' !== blockType.name) {
     return element;
   }
 
@@ -451,9 +473,9 @@ __webpack_require__.r(__webpack_exports__);
  * Apply focal point styles in the editor
  * This ensures the focal point is visible while editing
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('editor.BlockListBlock', 'mai/with-focal-point-styles', (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.createHigherOrderComponent)(BlockListBlock => {
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('editor.BlockListBlock', 'mai-grid-gallery/with-focal-point-styles', (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.createHigherOrderComponent)(BlockListBlock => {
   return props => {
-    if (props.name !== 'core/image') {
+    if ('core/image' !== props.name) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(BlockListBlock, {
         ...props
       });

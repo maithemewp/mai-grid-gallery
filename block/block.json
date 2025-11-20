@@ -9,12 +9,19 @@
 	"textdomain": "mai-grid-gallery",
 	"supports": {
 		"align": [ "wide", "full" ],
-		"html": false
+		"html": false,
+		"dimensions": {
+			"aspectRatio": true
+		}
 	},
 	"attributes": {
 		"focalPoints": {
 			"type": "object",
 			"default": {}
+		},
+		"maxVisible": {
+			"type": "number",
+			"default": 0
 		}
 	},
 	"editorScript": "file:../build/editor.js",
