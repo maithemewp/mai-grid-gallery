@@ -2,13 +2,22 @@
  * WordPress dependencies
  */
 import { registerBlockType } from '@wordpress/blocks';
-import { useBlockProps, useInnerBlocksProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
-import { gallery as icon } from '@wordpress/icons';
+import {
+	useBlockProps,
+	InnerBlocks,
+	MediaUpload,
+	MediaUploadCheck,
+	InspectorControls,
+	BlockControls,
+} from '@wordpress/block-editor';
+import { Button, ToolbarGroup, ToolbarButton, SelectControl } from '@wordpress/components';
+import { plus } from '@wordpress/icons';
+import { createBlock } from '@wordpress/blocks';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { FocalPointPicker, SelectControl } from '@wordpress/components';
+import { FocalPointPicker } from '@wordpress/components';
 import { useState, cloneElement } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -18,94 +27,171 @@ import metadata from '../block/block.json';
 
 /**
  * Register the Grid Gallery block
- * This block allows for a grid of images and videos with customizable focal points
  */
 registerBlockType('mai/grid-gallery', {
 	...metadata,
-	icon,
-	edit: ({ attributes, setAttributes }) => {
+	edit: ({ clientId, attributes, setAttributes }) => {
 		const blockProps = useBlockProps();
-		const pluginUrl = window.maiGridGalleryVars?.pluginUrl.replace(/\/?$/, '/'); // Ensure trailing slash
 
-		const innerBlocksProps = useInnerBlocksProps(blockProps, {
-			allowedBlocks: [
-				'core/image',
-				'core/video',
-			],
-			template: [
-				// ['core/video', {
-				// 	src: `${pluginUrl}assets/placeholder.mp4`,
-				// 	autoplay: true,
-				// 	controls: false,
-				// 	loop: true,
-				// 	muted: true,
-				// 	playsInline: true
-				// }],
-				['core/image', {
-					url: `${pluginUrl}assets/placeholder.png`,
-					alt: 'Placeholder image'
-				}],
-				['core/image', {
-					url: `${pluginUrl}assets/placeholder.png`,
-					alt: 'Placeholder image'
-				}],
-				['core/image', {
-					url: `${pluginUrl}assets/placeholder.png`,
-					alt: 'Placeholder image'
-				}],
-				['core/image', {
-					url: `${pluginUrl}assets/placeholder.png`,
-					alt: 'Placeholder image'
-				}],
-				['core/image', {
-					url: `${pluginUrl}assets/placeholder.png`,
-					alt: 'Placeholder image'
-				}],
-				['core/image', {
-					url: `${pluginUrl}assets/placeholder.png`,
-					alt: 'Placeholder image'
-				}],
-				['core/image', {
-					url: `${pluginUrl}assets/placeholder.png`,
-					alt: 'Placeholder image'
-				}],
-				['core/image', {
-					url: `${pluginUrl}assets/placeholder.png`,
-					alt: 'Placeholder image'
-				}]
-			],
-			templateLock: false,
-			max: 6
-		});
+		const { getBlocks } = useSelect(
+			(select) => select('core/block-editor'),
+			[]
+		);
 
-		// Max visible options (0-8)
-		const maxVisibleOptions = Array.from({ length: 9 }, (_, i) => ({
-			label: i === 0 ? __('Image count (max 8)') : i.toString(),
-			value: i.toString()
-		}));
+		const { insertBlocks } = useDispatch('core/block-editor');
+
+		const innerBlocks = getBlocks(clientId);
+		const hasInnerBlocks = innerBlocks.length > 0;
+
+		const handleMediaSelect = (media) => {
+			if (!media || media.length === 0) {
+				return;
+			}
+
+			const blocksToInsert = media.map((item) => {
+				if (item.type && item.type.startsWith('video/')) {
+					return createBlock('core/video', {
+						src: item.url,
+						id: item.id,
+					});
+				} else {
+					return createBlock('core/image', {
+						url: item.url,
+						alt: item.alt || '',
+						id: item.id,
+					});
+				}
+			});
+
+			if (blocksToInsert.length > 0) {
+				const currentBlocks = getBlocks(clientId);
+				insertBlocks(blocksToInsert, currentBlocks.length, clientId);
+			}
+		};
+
+		const renderMediaUploadButton = (open) => (
+			<Button
+				variant="secondary"
+				onClick={open}
+			>
+				{__('Add Media', 'mai-grid-gallery')}
+			</Button>
+		);
 
 		return (
 			<>
+				{hasInnerBlocks && (
+					<BlockControls>
+						<ToolbarGroup>
+							<MediaUploadCheck>
+								<MediaUpload
+									onSelect={handleMediaSelect}
+									allowedTypes={['image', 'video']}
+									multiple={true}
+									gallery={true}
+									value={[]}
+									render={({ open }) => (
+										<ToolbarButton
+											onClick={open}
+											icon={plus}
+											label={__('Add Media', 'mai-grid-gallery')}
+										>
+											{__('Add Media', 'mai-grid-gallery')}
+										</ToolbarButton>
+									)}
+								/>
+							</MediaUploadCheck>
+						</ToolbarGroup>
+					</BlockControls>
+				)}
 				<InspectorControls>
 					<SelectControl
-						label={__('Max Visible')}
+						label={__('Max Visible', 'mai-grid-gallery')}
 						value={attributes.maxVisible?.toString() || '0'}
-						options={maxVisibleOptions}
+						options={Array.from({ length: 9 }, (_, i) => ({
+							label: i === 0 ? __('All', 'mai-grid-gallery') : i.toString(),
+							value: i.toString()
+						}))}
 						onChange={(value) => setAttributes({ maxVisible: parseInt(value, 10) })}
 					/>
+					{hasInnerBlocks && (
+						<MediaUploadCheck>
+							<MediaUpload
+								onSelect={handleMediaSelect}
+								allowedTypes={['image', 'video']}
+								multiple={true}
+								gallery={true}
+								value={[]}
+								render={({ open }) => (
+									<div style={{ padding: '16px' }}>
+										<Button
+											variant="secondary"
+											onClick={open}
+											size="large"
+											style={{ width: '100%' }}
+										>
+											{__('Add Media', 'mai-grid-gallery')}
+										</Button>
+									</div>
+								)}
+							/>
+						</MediaUploadCheck>
+					)}
 				</InspectorControls>
-				<div {...innerBlocksProps} />
+				<div {...blockProps}>
+					{!hasInnerBlocks && (
+						<MediaUploadCheck>
+							<MediaUpload
+								onSelect={handleMediaSelect}
+								allowedTypes={['image', 'video']}
+								multiple={true}
+								gallery={true}
+								value={[]}
+								render={({ open }) => (
+									<div
+										style={{
+											display: 'flex',
+											flexDirection: 'column',
+											alignItems: 'center',
+											justifyContent: 'center',
+											minHeight: '200px',
+											padding: '40px',
+											textAlign: 'center',
+										}}
+									>
+										<Button
+											variant="secondary"
+											onClick={open}
+											size="large"
+										>
+											{__('Add Media', 'mai-grid-gallery')}
+										</Button>
+										<p style={{ marginTop: '16px', color: '#757575' }}>
+											{__('Select images and videos to add to the gallery.', 'mai-grid-gallery')}
+										</p>
+									</div>
+								)}
+							/>
+						</MediaUploadCheck>
+					)}
+					<InnerBlocks
+						allowedBlocks={['core/image', 'core/video']}
+						templateLock={false}
+						orientation="horizontal"
+					/>
+				</div>
 			</>
 		);
 	},
 	save: () => {
 		const blockProps = useBlockProps.save();
+
 		return (
 			<div {...blockProps}>
 				<InnerBlocks.Content />
 			</div>
 		);
-	}
+	},
 });
 
 /**
@@ -206,6 +292,42 @@ addFilter(
 );
 
 /**
+ * Remove InnerBlocks wrapper div from saved output
+ * This removes the block-editor-inner-blocks div so images are direct children
+ */
+addFilter(
+	'blocks.getSaveElement',
+	'mai-grid-gallery/remove-inner-blocks-wrapper',
+	(element, blockType) => {
+		if ('mai/grid-gallery' !== blockType.name) {
+			return element;
+		}
+
+		// Find and unwrap the block-editor-inner-blocks div
+		if (element?.props?.children) {
+			const children = element.props.children;
+
+			// Check if children is a single div with block-editor-inner-blocks class
+			if (children?.props?.className) {
+				const className = children.props.className;
+				if (
+					className.includes('block-editor-inner-blocks') ||
+					className.includes('wp-block-mai-grid-gallery')
+				) {
+					// Return the block wrapper with unwrapped inner content
+					return cloneElement(element, {
+						...element.props,
+						children: children.props.children,
+					});
+				}
+			}
+		}
+
+		return element;
+	}
+);
+
+/**
  * Apply focal point styles to saved HTML
  */
 addFilter(
@@ -225,6 +347,7 @@ addFilter(
 		return cloneElement(element, {
 			...element.props,
 			style: {
+				...element.props.style,
 				'--object-position': `${attributes.focalPoint.x * 100}% ${attributes.focalPoint.y * 100}%`
 			}
 		});

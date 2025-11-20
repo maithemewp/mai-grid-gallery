@@ -8,20 +8,19 @@
   \**************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"mai/grid-gallery","title":"Mai Grid Gallery","description":"A responsive, stylish, and lightweight grid gallery with lightbox support","category":"media","icon":"grid-view","keywords":["gallery","grid","images","video","lightbox"],"textdomain":"mai-grid-gallery","supports":{"align":["wide","full"],"html":false,"dimensions":{"aspectRatio":true}},"attributes":{"focalPoints":{"type":"object","default":{}},"maxVisible":{"type":"number","default":0}},"editorScript":"file:../build/editor.js","editorStyle":"file:../build/editor-styles.css","viewScript":"file:../build/frontend.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"mai/grid-gallery","title":"Mai Grid Gallery","description":"A responsive, stylish, and lightweight grid gallery with lightbox support","category":"media","icon":"images-alt2","keywords":["gallery","grid","images","video","lightbox"],"textdomain":"mai-grid-gallery","supports":{"align":["wide","full"],"html":false,"dimensions":{"aspectRatio":true}},"attributes":{"focalPoints":{"type":"object","default":{}},"maxVisible":{"type":"number","default":0}},"editorScript":"file:../build/editor.js","editorStyle":"file:../build/editor-styles.css","viewScript":"file:../build/frontend.js"}');
 
 /***/ }),
 
-/***/ "./node_modules/@wordpress/icons/build-module/library/gallery.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/@wordpress/icons/build-module/library/gallery.js ***!
-  \***********************************************************************/
+/***/ "./node_modules/@wordpress/icons/build-module/library/plus.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/plus.js ***!
+  \********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   gallery: () => (/* binding */ gallery)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -32,16 +31,14 @@ __webpack_require__.r(__webpack_exports__);
  * WordPress dependencies
  */
 
-const gallery = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
-  viewBox: "0 0 24 24",
-  xmlns: "http://www.w3.org/2000/svg"
+const plus = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
-  d: "M16.375 4.5H4.625a.125.125 0 0 0-.125.125v8.254l2.859-1.54a.75.75 0 0 1 .68-.016l2.384 1.142 2.89-2.074a.75.75 0 0 1 .874 0l2.313 1.66V4.625a.125.125 0 0 0-.125-.125Zm.125 9.398-2.75-1.975-2.813 2.02a.75.75 0 0 1-.76.067l-2.444-1.17L4.5 14.583v1.792c0 .069.056.125.125.125h11.75a.125.125 0 0 0 .125-.125v-2.477ZM4.625 3C3.728 3 3 3.728 3 4.625v11.75C3 17.273 3.728 18 4.625 18h11.75c.898 0 1.625-.727 1.625-1.625V4.625C18 3.728 17.273 3 16.375 3H4.625ZM20 8v11c0 .69-.31 1-.999 1H6v1.5h13.001c1.52 0 2.499-.982 2.499-2.5V8H20Z",
-  fillRule: "evenodd",
-  clipRule: "evenodd"
+  d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z"
 }));
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (gallery);
-//# sourceMappingURL=gallery.js.map
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (plus);
+//# sourceMappingURL=plus.js.map
 
 /***/ }),
 
@@ -234,13 +231,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/gallery.js");
-/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/hooks */ "@wordpress/hooks");
-/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/plus.js");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/hooks */ "@wordpress/hooks");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
@@ -263,6 +260,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /**
  * Internal dependencies
  */
@@ -270,78 +269,151 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Register the Grid Gallery block
- * This block allows for a grid of images and videos with customizable focal points
  */
 
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)('mai/grid-gallery', {
   ..._block_block_json__WEBPACK_IMPORTED_MODULE_8__,
-  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__["default"],
   edit: ({
+    clientId,
     attributes,
     setAttributes
   }) => {
     const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)();
-    const pluginUrl = window.maiGridGalleryVars?.pluginUrl.replace(/\/?$/, '/'); // Ensure trailing slash
-
-    const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useInnerBlocksProps)(blockProps, {
-      allowedBlocks: ['core/image', 'core/video'],
-      template: [
-      // ['core/video', {
-      // 	src: `${pluginUrl}assets/placeholder.mp4`,
-      // 	autoplay: true,
-      // 	controls: false,
-      // 	loop: true,
-      // 	muted: true,
-      // 	playsInline: true
-      // }],
-      ['core/image', {
-        url: `${pluginUrl}assets/placeholder.png`,
-        alt: 'Placeholder image'
-      }], ['core/image', {
-        url: `${pluginUrl}assets/placeholder.png`,
-        alt: 'Placeholder image'
-      }], ['core/image', {
-        url: `${pluginUrl}assets/placeholder.png`,
-        alt: 'Placeholder image'
-      }], ['core/image', {
-        url: `${pluginUrl}assets/placeholder.png`,
-        alt: 'Placeholder image'
-      }], ['core/image', {
-        url: `${pluginUrl}assets/placeholder.png`,
-        alt: 'Placeholder image'
-      }], ['core/image', {
-        url: `${pluginUrl}assets/placeholder.png`,
-        alt: 'Placeholder image'
-      }], ['core/image', {
-        url: `${pluginUrl}assets/placeholder.png`,
-        alt: 'Placeholder image'
-      }], ['core/image', {
-        url: `${pluginUrl}assets/placeholder.png`,
-        alt: 'Placeholder image'
-      }]],
-      templateLock: false,
-      max: 6
+    const {
+      getBlocks
+    } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_6__.useSelect)(select => select('core/block-editor'), []);
+    const {
+      insertBlocks
+    } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_6__.useDispatch)('core/block-editor');
+    const innerBlocks = getBlocks(clientId);
+    const hasInnerBlocks = innerBlocks.length > 0;
+    const handleMediaSelect = media => {
+      if (!media || media.length === 0) {
+        return;
+      }
+      const blocksToInsert = media.map(item => {
+        if (item.type && item.type.startsWith('video/')) {
+          return (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.createBlock)('core/video', {
+            src: item.url,
+            id: item.id
+          });
+        } else {
+          return (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.createBlock)('core/image', {
+            url: item.url,
+            alt: item.alt || '',
+            id: item.id
+          });
+        }
+      });
+      if (blocksToInsert.length > 0) {
+        const currentBlocks = getBlocks(clientId);
+        insertBlocks(blocksToInsert, currentBlocks.length, clientId);
+      }
+    };
+    const renderMediaUploadButton = open => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      variant: "secondary",
+      onClick: open,
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Add Media', 'mai-grid-gallery')
     });
-
-    // Max visible options (0-8)
-    const maxVisibleOptions = Array.from({
-      length: 9
-    }, (_, i) => ({
-      label: i === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Image count (max 8)') : i.toString(),
-      value: i.toString()
-    }));
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.SelectControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Max Visible'),
+      children: [hasInnerBlocks && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.BlockControls, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarGroup, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUploadCheck, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
+              onSelect: handleMediaSelect,
+              allowedTypes: ['image', 'video'],
+              multiple: true,
+              gallery: true,
+              value: [],
+              render: ({
+                open
+              }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarButton, {
+                onClick: open,
+                icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__["default"],
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Add Media', 'mai-grid-gallery'),
+                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Add Media', 'mai-grid-gallery')
+              })
+            })
+          })
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Max Visible', 'mai-grid-gallery'),
           value: attributes.maxVisible?.toString() || '0',
-          options: maxVisibleOptions,
+          options: Array.from({
+            length: 9
+          }, (_, i) => ({
+            label: i === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('All', 'mai-grid-gallery') : i.toString(),
+            value: i.toString()
+          })),
           onChange: value => setAttributes({
             maxVisible: parseInt(value, 10)
           })
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-        ...innerBlocksProps
+        }), hasInnerBlocks && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUploadCheck, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
+            onSelect: handleMediaSelect,
+            allowedTypes: ['image', 'video'],
+            multiple: true,
+            gallery: true,
+            value: [],
+            render: ({
+              open
+            }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+              style: {
+                padding: '16px'
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+                variant: "secondary",
+                onClick: open,
+                size: "large",
+                style: {
+                  width: '100%'
+                },
+                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Add Media', 'mai-grid-gallery')
+              })
+            })
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        ...blockProps,
+        children: [!hasInnerBlocks && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUploadCheck, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
+            onSelect: handleMediaSelect,
+            allowedTypes: ['image', 'video'],
+            multiple: true,
+            gallery: true,
+            value: [],
+            render: ({
+              open
+            }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '200px',
+                padding: '40px',
+                textAlign: 'center'
+              },
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+                variant: "secondary",
+                onClick: open,
+                size: "large",
+                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Add Media', 'mai-grid-gallery')
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+                style: {
+                  marginTop: '16px',
+                  color: '#757575'
+                },
+                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Select images and videos to add to the gallery.', 'mai-grid-gallery')
+              })]
+            })
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks, {
+          allowedBlocks: ['core/image', 'core/video'],
+          templateLock: false,
+          orientation: "horizontal"
+        })]
       })]
     });
   },
@@ -358,7 +430,7 @@ __webpack_require__.r(__webpack_exports__);
  * Add focal point attribute to core/image block
  * This allows us to store the focal point coordinates for each image
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.registerBlockType', 'mai-grid-gallery/image-focal-point-attribute', (settings, name) => {
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__.addFilter)('blocks.registerBlockType', 'mai-grid-gallery/image-focal-point-attribute', (settings, name) => {
   if ('core/image' !== name) {
     return settings;
   }
@@ -382,7 +454,7 @@ __webpack_require__.r(__webpack_exports__);
  * Add Focal Point Picker to image blocks within our gallery
  * This adds the UI control in the block sidebar for adjusting focal points
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('editor.BlockEdit', 'mai-grid-gallery/with-focal-point-picker', (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.createHigherOrderComponent)(BlockEdit => props => {
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__.addFilter)('editor.BlockEdit', 'mai-grid-gallery/with-focal-point-picker', (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__.createHigherOrderComponent)(BlockEdit => props => {
   // Only process core/image blocks
   if ('core/image' !== props.name) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(BlockEdit, {
@@ -435,7 +507,7 @@ __webpack_require__.r(__webpack_exports__);
         style: {
           padding: '0 16px 16px'
         },
-        children: imageUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.FocalPointPicker, {
+        children: imageUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FocalPointPicker, {
           __nextHasNoMarginBottom: true,
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Focal Point'),
           url: imageUrl,
@@ -450,9 +522,37 @@ __webpack_require__.r(__webpack_exports__);
 }, 'withFocalPointPicker'));
 
 /**
+ * Remove InnerBlocks wrapper div from saved output
+ * This removes the block-editor-inner-blocks div so images are direct children
+ */
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__.addFilter)('blocks.getSaveElement', 'mai-grid-gallery/remove-inner-blocks-wrapper', (element, blockType) => {
+  if ('mai/grid-gallery' !== blockType.name) {
+    return element;
+  }
+
+  // Find and unwrap the block-editor-inner-blocks div
+  if (element?.props?.children) {
+    const children = element.props.children;
+
+    // Check if children is a single div with block-editor-inner-blocks class
+    if (children?.props?.className) {
+      const className = children.props.className;
+      if (className.includes('block-editor-inner-blocks') || className.includes('wp-block-mai-grid-gallery')) {
+        // Return the block wrapper with unwrapped inner content
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.cloneElement)(element, {
+          ...element.props,
+          children: children.props.children
+        });
+      }
+    }
+  }
+  return element;
+});
+
+/**
  * Apply focal point styles to saved HTML
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('blocks.getSaveElement', 'mai-grid-gallery/apply-focal-point', (element, blockType, attributes) => {
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__.addFilter)('blocks.getSaveElement', 'mai-grid-gallery/apply-focal-point', (element, blockType, attributes) => {
   if ('core/image' !== blockType.name) {
     return element;
   }
@@ -464,6 +564,7 @@ __webpack_require__.r(__webpack_exports__);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.cloneElement)(element, {
     ...element.props,
     style: {
+      ...element.props.style,
       '--object-position': `${attributes.focalPoint.x * 100}% ${attributes.focalPoint.y * 100}%`
     }
   });
@@ -473,7 +574,7 @@ __webpack_require__.r(__webpack_exports__);
  * Apply focal point styles in the editor
  * This ensures the focal point is visible while editing
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__.addFilter)('editor.BlockListBlock', 'mai-grid-gallery/with-focal-point-styles', (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.createHigherOrderComponent)(BlockListBlock => {
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__.addFilter)('editor.BlockListBlock', 'mai-grid-gallery/with-focal-point-styles', (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__.createHigherOrderComponent)(BlockListBlock => {
   return props => {
     if ('core/image' !== props.name) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(BlockListBlock, {
