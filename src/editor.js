@@ -4,26 +4,35 @@
 import { registerBlockType } from '@wordpress/blocks';
 import {
 	useBlockProps,
+	useInnerBlocksProps,
 	InnerBlocks,
 	MediaUpload,
 	MediaUploadCheck,
 	InspectorControls,
 	BlockControls,
+	MediaPlaceholder,
+	MediaReplaceFlow,
 } from '@wordpress/block-editor';
 import { Button, ToolbarGroup, ToolbarButton, SelectControl } from '@wordpress/components';
-import { plus } from '@wordpress/icons';
+import { plus, gallery as icon } from '@wordpress/icons';
 import { createBlock } from '@wordpress/blocks';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { FocalPointPicker } from '@wordpress/components';
-import { useState, cloneElement } from '@wordpress/element';
+import { useState, cloneElement, createElement } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import { View } from '@wordpress/primitives';
 
 /**
  * Internal dependencies
  */
 import metadata from '../block/block.json';
+
+/**
+ * Add gallery icon to metadata.
+ */
+metadata.icon = icon;
 
 /**
  * Register the Grid Gallery block
@@ -38,17 +47,25 @@ registerBlockType('mai/grid-gallery', {
 			[]
 		);
 
-		const { insertBlocks } = useDispatch('core/block-editor');
+		const { insertBlocks, replaceInnerBlocks } = useDispatch('core/block-editor');
 
 		const innerBlocks = getBlocks(clientId);
 		const hasInnerBlocks = innerBlocks.length > 0;
+
+		const imageIds = innerBlocks
+			.filter((block) => block.attributes?.id)
+			.map((block) => block.attributes.id);
+		const hasImageIds = imageIds.length > 0;
 
 		const handleMediaSelect = (media) => {
 			if (!media || media.length === 0) {
 				return;
 			}
 
-			const blocksToInsert = media.map((item) => {
+			const newFileUploads = Object.prototype.toString.call(media) === '[object FileList]';
+			const mediaArray = newFileUploads ? Array.from(media) : media;
+
+			const blocksToInsert = mediaArray.map((item) => {
 				if (item.type && item.type.startsWith('video/')) {
 					return createBlock('core/video', {
 						src: item.url,
@@ -64,44 +81,37 @@ registerBlockType('mai/grid-gallery', {
 			});
 
 			if (blocksToInsert.length > 0) {
-				const currentBlocks = getBlocks(clientId);
-				insertBlocks(blocksToInsert, currentBlocks.length, clientId);
+				if (hasImageIds && !newFileUploads) {
+					// Add to existing gallery (when addToGallery is true)
+					const currentBlocks = getBlocks(clientId);
+					insertBlocks(blocksToInsert, currentBlocks.length, clientId);
+				} else {
+					// Replace all blocks
+					replaceInnerBlocks(clientId, blocksToInsert);
+				}
 			}
 		};
 
-		const renderMediaUploadButton = (open) => (
-			<Button
-				variant="secondary"
-				onClick={open}
-			>
-				{__('Add Media', 'mai-grid-gallery')}
-			</Button>
-		);
+		const innerBlocksProps = useInnerBlocksProps(blockProps, {
+			allowedBlocks: ['core/image', 'core/video'],
+			templateLock: false,
+			orientation: 'horizontal',
+		});
 
 		return (
 			<>
 				{hasInnerBlocks && (
-					<BlockControls>
-						<ToolbarGroup>
-							<MediaUploadCheck>
-								<MediaUpload
-									onSelect={handleMediaSelect}
-									allowedTypes={['image', 'video']}
-									multiple={true}
-									gallery={true}
-									value={[]}
-									render={({ open }) => (
-										<ToolbarButton
-											onClick={open}
-											icon={plus}
-											label={__('Add Media', 'mai-grid-gallery')}
-										>
-											{__('Add Media', 'mai-grid-gallery')}
-										</ToolbarButton>
-									)}
-								/>
-							</MediaUploadCheck>
-						</ToolbarGroup>
+					<BlockControls group="other">
+						<MediaReplaceFlow
+							allowedTypes={['image', 'video']}
+							accept="image/*,video/*"
+							handleUpload={false}
+							onSelect={handleMediaSelect}
+							name={__('Manage Media', 'mai-grid-gallery')}
+							multiple
+							mediaIds={imageIds}
+							addToGallery={hasImageIds}
+						/>
 					</BlockControls>
 				)}
 				<InspectorControls>
@@ -114,72 +124,27 @@ registerBlockType('mai/grid-gallery', {
 						}))}
 						onChange={(value) => setAttributes({ maxVisible: parseInt(value, 10) })}
 					/>
-					{hasInnerBlocks && (
-						<MediaUploadCheck>
-							<MediaUpload
-								onSelect={handleMediaSelect}
-								allowedTypes={['image', 'video']}
-								multiple={true}
-								gallery={true}
-								value={[]}
-								render={({ open }) => (
-									<div style={{ padding: '16px' }}>
-										<Button
-											variant="secondary"
-											onClick={open}
-											size="large"
-											style={{ width: '100%' }}
-										>
-											{__('Add Media', 'mai-grid-gallery')}
-										</Button>
-									</div>
-								)}
-							/>
-						</MediaUploadCheck>
-					)}
 				</InspectorControls>
-				<div {...blockProps}>
-					{!hasInnerBlocks && (
-						<MediaUploadCheck>
-							<MediaUpload
-								onSelect={handleMediaSelect}
-								allowedTypes={['image', 'video']}
-								multiple={true}
-								gallery={true}
-								value={[]}
-								render={({ open }) => (
-									<div
-										style={{
-											display: 'flex',
-											flexDirection: 'column',
-											alignItems: 'center',
-											justifyContent: 'center',
-											minHeight: '200px',
-											padding: '40px',
-											textAlign: 'center',
-										}}
-									>
-										<Button
-											variant="secondary"
-											onClick={open}
-											size="large"
-										>
-											{__('Add Media', 'mai-grid-gallery')}
-										</Button>
-										<p style={{ marginTop: '16px', color: '#757575' }}>
-											{__('Select images and videos to add to the gallery.', 'mai-grid-gallery')}
-										</p>
-									</div>
-								)}
-							/>
-						</MediaUploadCheck>
-					)}
-					<InnerBlocks
-						allowedBlocks={['core/image', 'core/video']}
-						templateLock={false}
-						orientation="horizontal"
-					/>
-				</div>
+				{!hasInnerBlocks ? (
+					<View {...innerBlocksProps}>
+						{innerBlocksProps.children}
+						<MediaPlaceholder
+							handleUpload={false}
+							icon={icon}
+							labels={{
+								title: __('Mai Grid Gallery', 'mai-grid-gallery'),
+								instructions: __('Drag and drop images, upload, or choose from your library.', 'mai-grid-gallery'),
+							}}
+							onSelect={handleMediaSelect}
+							accept="image/*,video/*"
+							allowedTypes={['image', 'video']}
+							multiple
+							value={{}}
+						/>
+					</View>
+				) : (
+					<div {...innerBlocksProps} />
+				)}
 			</>
 		);
 	},
@@ -289,42 +254,6 @@ addFilter(
 			</>
 		);
 	}, 'withFocalPointPicker')
-);
-
-/**
- * Remove InnerBlocks wrapper div from saved output
- * This removes the block-editor-inner-blocks div so images are direct children
- */
-addFilter(
-	'blocks.getSaveElement',
-	'mai-grid-gallery/remove-inner-blocks-wrapper',
-	(element, blockType) => {
-		if ('mai/grid-gallery' !== blockType.name) {
-			return element;
-		}
-
-		// Find and unwrap the block-editor-inner-blocks div
-		if (element?.props?.children) {
-			const children = element.props.children;
-
-			// Check if children is a single div with block-editor-inner-blocks class
-			if (children?.props?.className) {
-				const className = children.props.className;
-				if (
-					className.includes('block-editor-inner-blocks') ||
-					className.includes('wp-block-mai-grid-gallery')
-				) {
-					// Return the block wrapper with unwrapped inner content
-					return cloneElement(element, {
-						...element.props,
-						children: children.props.children,
-					});
-				}
-			}
-		}
-
-		return element;
-	}
 );
 
 /**

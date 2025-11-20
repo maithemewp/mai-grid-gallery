@@ -4,7 +4,6 @@
 	"title": "Mai Grid Gallery",
 	"description": "A responsive, stylish, and lightweight grid gallery with lightbox support",
 	"category": "media",
-	"icon": "images-alt2",
 	"keywords": [ "gallery", "grid", "images", "video", "lightbox" ],
 	"textdomain": "mai-grid-gallery",
 	"supports": {

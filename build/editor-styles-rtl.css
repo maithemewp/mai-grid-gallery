@@ -206,5 +206,20 @@
 		border-bottom-right-radius: 5px;
 		border-bottom-left-radius: 5px;
 	}
+
+	/* for some reason the MediaPlaceholder component keeps adding is-medium then it hides the instructions */
+	.components-placeholder {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		justify-content: center !important;
+		grid-column: span 24 !important;
+		grid-row: span 12 !important;
+
+		.components-placeholder__fieldset {
+			justify-content: center !important;
+		}
+	}
+
 }
 

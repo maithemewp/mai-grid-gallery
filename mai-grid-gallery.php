@@ -94,5 +94,5 @@ function enqueue_styles() {
 	$ver = filemtime( plugin_dir_path( __FILE__ ) . 'build/styles.css' );
 
 	// Enqueue the styles in the head if the block is on the page.
-		wp_enqueue_style( 'mai-grid-gallery-styles', plugin_dir_url(__FILE__) . 'build/styles.css', [], $ver );
-	}
+	wp_enqueue_style( 'mai-grid-gallery-styles', plugin_dir_url(__FILE__) . 'build/styles.css', [], $ver );
+}
