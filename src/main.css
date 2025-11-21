@@ -49,8 +49,9 @@
 		grid-row: span 4 / auto
 	}
 
-	/* 3 items */
-	&:has(>:nth-of-type(2):last-of-type) {
+	/* 2 items */
+	&.has-visible-2,
+	&:not([class*="has-visible-"]):has(>:nth-of-type(2):last-of-type) {
 		>:first-of-type,
 		>:nth-of-type(2) {
 			grid-column: span 12 / auto;
@@ -59,7 +60,8 @@
 	}
 
 	/* 3 items */
-	&:has(>:nth-of-type(3):last-of-type) {
+	&.has-visible-3,
+	&:not([class*="has-visible-"]):has(>:nth-of-type(3):last-of-type) {
 		>:first-of-type,
 		>:nth-of-type(2),
 		>:nth-of-type(3) {
@@ -69,7 +71,8 @@
 	}
 
 	/* 4 items */
-	&:has(>:nth-of-type(4):last-of-type) {
+	&.has-visible-4,
+	&:not([class*="has-visible-"]):has(>:nth-of-type(4):last-of-type) {
 		>:first-of-type {
 			grid-column: span 12 / auto;
 			grid-row: span 12 / auto;
@@ -88,7 +91,8 @@
 	}
 
 	/* 5 items */
-	&:has(>:nth-of-type(5):last-of-type) {
+	&.has-visible-5,
+	&:not([class*="has-visible-"]):has(>:nth-of-type(5):last-of-type) {
 		>:first-of-type {
 			grid-column: span 12 / auto;
 			grid-row: span 12 / auto;
@@ -108,7 +112,8 @@
 	}
 
 	/* 6 items */
-	&:has(>:nth-of-type(6):last-of-type) {
+	&.has-visible-6,
+	&:not([class*="has-visible-"]):has(>:nth-of-type(6):last-of-type) {
 		>:first-of-type {
 			grid-column: span 12 / auto;
 			grid-row: span 12 / auto;
@@ -129,7 +134,8 @@
 	}
 
 	/* 7 items */
-	&:has(>:nth-of-type(7):last-of-type) {
+	&.has-visible-7,
+	&:not([class*="has-visible-"]):has(>:nth-of-type(7):last-of-type) {
 		>:first-of-type {
 			grid-column: span 8 / auto;
 			grid-row: span 12 / auto;
@@ -157,7 +163,8 @@
 	}
 
 	/* 8 items */
-	&:has(>:nth-of-type(8):last-of-type) {
+	&.has-visible-8,
+	&:not([class*="has-visible-"]):has(>:nth-of-type(8):last-of-type) {
 		>:first-of-type {
 			grid-column: span 8 / auto;
 			grid-row: span 12 / auto;

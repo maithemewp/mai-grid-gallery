@@ -13,6 +13,9 @@
 			"aspectRatio": true
 		}
 	},
+	"providesContext": {
+		"mai/grid-gallery/maxVisible": "maxVisible"
+	},
 	"attributes": {
 		"focalPoints": {
 			"type": "object",

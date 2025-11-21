@@ -130,12 +130,28 @@ function initializeGridGallery() {
     const elements = Array.from(galleryEl.querySelectorAll('figure')).map(figure => {
       const media = figure.querySelector('img, video');
       const description = figure.querySelector('figcaption');
-      if (!media) return null;
+
+      // Bail if no media.
+      if (!media) {
+        return null;
+      }
       return {
         href: media.src,
         description: description ? description.textContent : ''
       };
     }).filter(Boolean);
+
+    // Get hidden elements.
+    const hiddenElements = galleryEl.querySelectorAll('span.mai-grid-gallery-hidden');
+    const hiddenElementsData = Array.from(hiddenElements).map(hiddenElement => {
+      return {
+        src: hiddenElement.dataset.src,
+        srcset: hiddenElement.dataset.srcset,
+        sizes: hiddenElement.dataset.sizes,
+        alt: hiddenElement.dataset.alt,
+        caption: hiddenElement.dataset.caption
+      };
+    });
 
     // Initialize GLightbox with configuration.
     const lightbox = glightbox__WEBPACK_IMPORTED_MODULE_0___default()({
@@ -152,6 +168,20 @@ function initializeGridGallery() {
         }
       }
     });
+
+    // If hidden elements.
+    if (hiddenElementsData.length > 0) {
+      // Loop through and add hidden elements to the lightbox.
+      hiddenElementsData.forEach(hiddenElement => {
+        lightbox.insertSlide({
+          href: hiddenElement.src,
+          srcset: hiddenElement.srcset,
+          sizes: hiddenElement.sizes,
+          alt: hiddenElement.alt,
+          caption: hiddenElement.caption
+        });
+      });
+    }
 
     // Add slide information to each slide.
     lightbox.on('slide_before_load', data => {

@@ -6,23 +6,21 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InnerBlocks,
-	MediaUpload,
-	MediaUploadCheck,
 	InspectorControls,
 	BlockControls,
 	MediaPlaceholder,
 	MediaReplaceFlow,
 } from '@wordpress/block-editor';
-import { Button, ToolbarGroup, ToolbarButton, SelectControl } from '@wordpress/components';
-import { plus, gallery as icon } from '@wordpress/icons';
+import { SelectControl, PanelBody } from '@wordpress/components';
+import { gallery as icon } from '@wordpress/icons';
 import { createBlock } from '@wordpress/blocks';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { FocalPointPicker } from '@wordpress/components';
-import { useState, cloneElement, createElement } from '@wordpress/element';
+import { useState, cloneElement } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
 import { View } from '@wordpress/primitives';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -40,7 +38,11 @@ metadata.icon = icon;
 registerBlockType('mai/grid-gallery', {
 	...metadata,
 	edit: ({ clientId, attributes, setAttributes }) => {
-		const blockProps = useBlockProps();
+		const blockProps = useBlockProps({
+			className: attributes.maxVisible && attributes.maxVisible > 0
+				? `has-visible-${attributes.maxVisible}`
+				: undefined,
+		});
 
 		const { getBlocks } = useSelect(
 			(select) => select('core/block-editor'),
@@ -115,15 +117,17 @@ registerBlockType('mai/grid-gallery', {
 					</BlockControls>
 				)}
 				<InspectorControls>
-					<SelectControl
-						label={__('Max Visible', 'mai-grid-gallery')}
-						value={attributes.maxVisible?.toString() || '0'}
-						options={Array.from({ length: 9 }, (_, i) => ({
-							label: i === 0 ? __('All', 'mai-grid-gallery') : i.toString(),
-							value: i.toString()
-						}))}
-						onChange={(value) => setAttributes({ maxVisible: parseInt(value, 10) })}
-					/>
+					<PanelBody title={__('Settings', 'mai-grid-gallery')}>
+						<SelectControl
+							label={__('Max Visible Items', 'mai-grid-gallery')}
+							value={attributes.maxVisible?.toString() || '0'}
+							options={Array.from({ length: 9 }, (_, i) => ({
+								label: i === 0 ? __('Use image count (max 8)', 'mai-grid-gallery') : i.toString(),
+								value: i.toString()
+							}))}
+							onChange={(value) => setAttributes({ maxVisible: parseInt(value, 10) })}
+						/>
+					</PanelBody>
 				</InspectorControls>
 				{!hasInnerBlocks ? (
 					<View {...innerBlocksProps}>
@@ -148,8 +152,12 @@ registerBlockType('mai/grid-gallery', {
 			</>
 		);
 	},
-	save: () => {
-		const blockProps = useBlockProps.save();
+	save: ({ attributes }) => {
+		const blockProps = useBlockProps.save({
+			className: attributes.maxVisible && attributes.maxVisible > 0
+				? `has-visible-${attributes.maxVisible}`
+				: undefined,
+		});
 
 		return (
 			<div {...blockProps}>

@@ -8,7 +8,7 @@
   \**************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"mai/grid-gallery","title":"Mai Grid Gallery","description":"A responsive, stylish, and lightweight grid gallery with lightbox support","category":"media","keywords":["gallery","grid","images","video","lightbox"],"textdomain":"mai-grid-gallery","supports":{"align":["wide","full"],"html":false,"dimensions":{"aspectRatio":true}},"attributes":{"focalPoints":{"type":"object","default":{}},"maxVisible":{"type":"number","default":0}},"editorScript":"file:../build/editor.js","editorStyle":"file:../build/editor-styles.css","viewScript":"file:../build/frontend.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"mai/grid-gallery","title":"Mai Grid Gallery","description":"A responsive, stylish, and lightweight grid gallery with lightbox support","category":"media","keywords":["gallery","grid","images","video","lightbox"],"textdomain":"mai-grid-gallery","supports":{"align":["wide","full"],"html":false,"dimensions":{"aspectRatio":true}},"providesContext":{"mai/grid-gallery/maxVisible":"maxVisible"},"attributes":{"focalPoints":{"type":"object","default":{}},"maxVisible":{"type":"number","default":0}},"editorScript":"file:../build/editor.js","editorStyle":"file:../build/editor-styles.css","viewScript":"file:../build/frontend.js"}');
 
 /***/ }),
 
@@ -245,10 +245,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _block_block_json__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../block/block.json */ "./block/block.json");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
@@ -289,7 +289,9 @@ _block_block_json__WEBPACK_IMPORTED_MODULE_9__.icon = _wordpress_icons__WEBPACK_
     attributes,
     setAttributes
   }) => {
-    const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)();
+    const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
+      className: attributes.maxVisible && attributes.maxVisible > 0 ? `has-visible-${attributes.maxVisible}` : undefined
+    });
     const {
       getBlocks
     } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_6__.useSelect)(select => select('core/block-editor'), []);
@@ -345,33 +347,36 @@ _block_block_json__WEBPACK_IMPORTED_MODULE_9__.icon = _wordpress_icons__WEBPACK_
           accept: "image/*,video/*",
           handleUpload: false,
           onSelect: handleMediaSelect,
-          name: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Manage Media', 'mai-grid-gallery'),
+          name: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Manage Media', 'mai-grid-gallery'),
           multiple: true,
           mediaIds: imageIds,
           addToGallery: hasImageIds
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Max Visible', 'mai-grid-gallery'),
-          value: attributes.maxVisible?.toString() || '0',
-          options: Array.from({
-            length: 9
-          }, (_, i) => ({
-            label: i === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('All', 'mai-grid-gallery') : i.toString(),
-            value: i.toString()
-          })),
-          onChange: value => setAttributes({
-            maxVisible: parseInt(value, 10)
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Settings', 'mai-grid-gallery'),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Max Visible Items', 'mai-grid-gallery'),
+            value: attributes.maxVisible?.toString() || '0',
+            options: Array.from({
+              length: 9
+            }, (_, i) => ({
+              label: i === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Use image count (max 8)', 'mai-grid-gallery') : i.toString(),
+              value: i.toString()
+            })),
+            onChange: value => setAttributes({
+              maxVisible: parseInt(value, 10)
+            })
           })
         })
-      }), !hasInnerBlocks ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__.View, {
+      }), !hasInnerBlocks ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_7__.View, {
         ...innerBlocksProps,
         children: [innerBlocksProps.children, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaPlaceholder, {
           handleUpload: false,
           icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__["default"],
           labels: {
-            title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Mai Grid Gallery', 'mai-grid-gallery'),
-            instructions: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Drag and drop images, upload, or choose from your library.', 'mai-grid-gallery')
+            title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Mai Grid Gallery', 'mai-grid-gallery'),
+            instructions: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Drag and drop images, upload, or choose from your library.', 'mai-grid-gallery')
           },
           onSelect: handleMediaSelect,
           accept: "image/*,video/*",
@@ -384,8 +389,12 @@ _block_block_json__WEBPACK_IMPORTED_MODULE_9__.icon = _wordpress_icons__WEBPACK_
       })]
     });
   },
-  save: () => {
-    const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save();
+  save: ({
+    attributes
+  }) => {
+    const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save({
+      className: attributes.maxVisible && attributes.maxVisible > 0 ? `has-visible-${attributes.maxVisible}` : undefined
+    });
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
       ...blockProps,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, {})
@@ -476,7 +485,7 @@ _block_block_json__WEBPACK_IMPORTED_MODULE_9__.icon = _wordpress_icons__WEBPACK_
         },
         children: imageUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FocalPointPicker, {
           __nextHasNoMarginBottom: true,
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Focal Point'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Focal Point'),
           url: imageUrl,
           value: focalPoint,
           onDragStart: handleFocalPointChange,
