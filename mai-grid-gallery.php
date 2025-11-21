@@ -130,6 +130,11 @@ function render_block_mai_grid_gallery( $block_content, $block, $instance ) {
 	// Reset the item count.
 	item_count( true );
 
+	// Return empty string if there are no inner blocks.
+	if ( ! isset( $block['innerBlocks'] ) || empty( $block['innerBlocks'] ) ) {
+		return '';
+	}
+
 	return $block_content;
 }
 
@@ -175,7 +180,13 @@ function render_block_core_image( $block_content, $block, $instance ) {
 	$sizes   = wp_get_attachment_image_sizes( $image_id, 'full' );
 	$alt     = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
 	$alt     = $alt ?: $block['attrs']['alt'] ?? '';
-	$caption = wp_get_attachment_caption( $image_id );
+
+	// Get caption from first figcaption element in the content if it exists, otherwise use attachment caption.
+	if ( preg_match( '/<figcaption[^>]*>(.*?)<\/figcaption>/is', $block_content, $matches ) ) {
+		$caption = wp_strip_all_tags( $matches[1] );
+	} else {
+		$caption = wp_get_attachment_caption( $image_id );
+	}
 
 	// Build span with data attributes.
 	$span = sprintf( '<span style="display:none!important;" class="mai-grid-gallery-hidden" data-src="%s" data-srcset="%s" data-sizes="%s" data-alt="%s" data-caption="%s"></span>',

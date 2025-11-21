@@ -85,7 +85,7 @@ function initializeGridGallery() {
 					srcset: hiddenElement.srcset,
 					sizes: hiddenElement.sizes,
 					alt: hiddenElement.alt,
-					caption: hiddenElement.caption,
+					description: hiddenElement.caption,
 				});
 			});
 		}

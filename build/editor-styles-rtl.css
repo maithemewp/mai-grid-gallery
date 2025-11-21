@@ -204,6 +204,7 @@
 		right: 8px;
 		left: 8px;
 		width: calc(100% - 16px);
+		max-height: calc(100% - 16px);
 		margin: 0;
 		padding: 4px;
 		background: rgba(255, 255, 255, 0.75);
@@ -212,6 +213,7 @@
 		border-top-left-radius: 2px;
 		border-bottom-right-radius: 5px;
 		border-bottom-left-radius: 5px;
+		overflow-y: auto;
 	}
 
 	/* for some reason the MediaPlaceholder component keeps adding is-medium then it hides the instructions */
