@@ -11,8 +11,8 @@ import {
 	MediaPlaceholder,
 	MediaReplaceFlow,
 } from '@wordpress/block-editor';
-import { SelectControl, PanelBody } from '@wordpress/components';
-import { gallery as icon } from '@wordpress/icons';
+import { SelectControl, PanelBody, Toolbar,ToolbarGroup, ToolbarButton } from '@wordpress/components';
+import { gallery as icon, seen, unseen } from '@wordpress/icons';
 import { createBlock } from '@wordpress/blocks';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
@@ -38,11 +38,8 @@ metadata.icon = icon;
 registerBlockType('mai/grid-gallery', {
 	...metadata,
 	edit: ({ clientId, attributes, setAttributes }) => {
-		const blockProps = useBlockProps({
-			className: attributes.maxVisible && attributes.maxVisible > 0
-				? `has-visible-${attributes.maxVisible}`
-				: undefined,
-		});
+		// Editor-only state for showing/hiding extra images
+		const [editorShowAll, setEditorShowAll] = useState(false);
 
 		const { getBlocks } = useSelect(
 			(select) => select('core/block-editor'),
@@ -53,6 +50,19 @@ registerBlockType('mai/grid-gallery', {
 
 		const innerBlocks = getBlocks(clientId);
 		const hasInnerBlocks = innerBlocks.length > 0;
+		const maxVisible = attributes.maxVisible || 0;
+		const hasHiddenImages = maxVisible > 0 && innerBlocks.length > maxVisible;
+
+		const blockProps = useBlockProps({
+			className: [
+				attributes.maxVisible && attributes.maxVisible > 0
+					? `has-visible-${attributes.maxVisible}`
+					: undefined,
+				hasHiddenImages && !editorShowAll
+					? 'hide-extra-in-editor'
+					: undefined,
+			].filter(Boolean).join(' '),
+		});
 
 		const imageIds = innerBlocks
 			.filter((block) => block.attributes?.id)
@@ -102,8 +112,9 @@ registerBlockType('mai/grid-gallery', {
 
 		return (
 			<>
-				{hasInnerBlocks && (
-					<BlockControls group="other">
+			{hasInnerBlocks && (
+				<BlockControls group="other">
+					<ToolbarGroup>
 						<MediaReplaceFlow
 							allowedTypes={['image', 'video']}
 							accept="image/*,video/*"
@@ -114,8 +125,22 @@ registerBlockType('mai/grid-gallery', {
 							mediaIds={imageIds}
 							addToGallery={hasImageIds}
 						/>
-					</BlockControls>
-				)}
+					</ToolbarGroup>
+					{hasHiddenImages && (
+						<ToolbarGroup>
+							<ToolbarButton
+								icon={editorShowAll ? seen : unseen}
+								text={editorShowAll
+									? __('Hide extra', 'mai-grid-gallery')
+									: __('Show hidden', 'mai-grid-gallery')
+								}
+								onClick={() => setEditorShowAll(!editorShowAll)}
+								isPressed={editorShowAll}
+							/>
+						</ToolbarGroup>
+					)}
+				</BlockControls>
+			)}
 				<InspectorControls>
 					<PanelBody title={__('Settings', 'mai-grid-gallery')}>
 						<SelectControl

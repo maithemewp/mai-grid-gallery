@@ -37,7 +37,7 @@ function initializeGridGallery() {
 	const initializeLightbox = (galleryEl) => {
 		// Map gallery items to GLightbox elements configuration.
 		const elements = Array.from(galleryEl.querySelectorAll('figure')).map(figure => {
-			const media = figure.querySelector('img, video');
+			const media       = figure.querySelector('img, video');
 			const description = figure.querySelector('figcaption');
 
 			// Bail if no media.
@@ -52,8 +52,8 @@ function initializeGridGallery() {
 		}).filter(Boolean);
 
 		// Get hidden elements.
-		const hiddenElements      = galleryEl.querySelectorAll('span.mai-grid-gallery-hidden');
-		const hiddenElementsData  = Array.from(hiddenElements).map(hiddenElement => {
+		const hiddenElements     = galleryEl.querySelectorAll('span.mai-grid-gallery-hidden');
+		const hiddenElementsData = Array.from(hiddenElements).map(hiddenElement => {
 			return {
 				src: hiddenElement.dataset.src,
 				srcset: hiddenElement.dataset.srcset,
@@ -62,7 +62,6 @@ function initializeGridGallery() {
 				caption: hiddenElement.dataset.caption,
 			};
 		});
-
 
 		// Initialize GLightbox with configuration.
 		const lightbox = GLightbox({
@@ -76,7 +75,6 @@ function initializeGridGallery() {
 				fade: { in: 'fadeIn', out: 'fadeOut' },
 			}
 		});
-
 
 		// If hidden elements.
 		if ( hiddenElementsData.length > 0 ) {
