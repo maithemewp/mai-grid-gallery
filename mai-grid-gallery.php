@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Mai Grid Gallery
- * Description:       A responsive, stylish, and lightweight grid gallery with lightbox support",
+ * Description:       A responsive, stylish, and lightweight grid gallery with lightbox support
  * Version:           0.1.0
  * Requires at least: 6.7
  * Requires PHP:      8.2
@@ -214,5 +214,19 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\updater' );
  */
 function updater() {
 	$updater = PucFactory::buildUpdateChecker( 'https://github.com/maithemewp/mai-grid-gallery', __FILE__, 'mai-grid-gallery' );
-	$updater->setBranch( 'main' );
+
+	// Maybe set github api token.
+	if ( defined( 'MAI_GITHUB_API_TOKEN' ) ) {
+		$updater->setAuthentication( MAI_GITHUB_API_TOKEN );
+	}
+
+	// Add icons for Dashboard > Updates screen.
+	if ( function_exists( 'mai_get_updater_icons' ) && $icons = mai_get_updater_icons() ) {
+		$updater->addResultFilter(
+			function ( $info ) use ( $icons ) {
+				$info->icons = $icons;
+				return $info;
+			}
+		);
+	}
 }
