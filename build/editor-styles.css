@@ -54,6 +54,15 @@
 		grid-row: span 4 / auto
 	}
 
+	/* 1 item */
+	&.has-visible-1,
+	&:not([class*="has-visible-"]):has(>:nth-of-type(1):last-of-type) {
+		>:first-of-type {
+			grid-column: span 24 / auto;
+			grid-row: span 12 / auto;
+		}
+	}
+
 	/* 2 items */
 	&.has-visible-2,
 	&:not([class*="has-visible-"]):has(>:nth-of-type(2):last-of-type) {

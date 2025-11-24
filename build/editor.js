@@ -362,10 +362,11 @@ _block_block_json__WEBPACK_IMPORTED_MODULE_9__.icon = _wordpress_icons__WEBPACK_
     } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_6__.useDispatch)('core/block-editor');
     const innerBlocks = getBlocks(clientId);
     const hasInnerBlocks = innerBlocks.length > 0;
-    const maxVisible = attributes.maxVisible || 0;
+    const maxVisible = attributes.maxVisible === 0 ? 8 : attributes.maxVisible;
     const hasHiddenImages = maxVisible > 0 && innerBlocks.length > maxVisible;
+    console.log('maxVisible', maxVisible);
     const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
-      className: [attributes.maxVisible && attributes.maxVisible > 0 ? `has-visible-${attributes.maxVisible}` : undefined, hasHiddenImages && !editorShowAll ? 'hide-extra-in-editor' : undefined].filter(Boolean).join(' ')
+      className: [maxVisible ? `has-visible-${attributes.maxVisible}` : undefined, hasHiddenImages && !editorShowAll ? 'hide-extra-in-editor' : undefined].filter(Boolean).join(' ')
     });
     const imageIds = innerBlocks.filter(block => block.attributes?.id).map(block => block.attributes.id);
     const hasImageIds = imageIds.length > 0;

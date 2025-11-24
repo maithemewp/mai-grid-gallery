@@ -111,9 +111,9 @@ function add_gallery_context_to_blocks_metadata( $metadata ) {
  * @return int
  */
 function item_count( $reset = false ) {
-	static $count = 0;
+	static $count = 1;
 	if ( $reset ) {
-		$count = 0;
+		$count = 1;
 	}
 	return $count++;
 }
@@ -157,8 +157,12 @@ function render_block_core_image( $block_content, $block, $instance ) {
 		return $block_content;
 	}
 
+	// Get current item.
+	$count       = item_count();
+	$max_visible = max( 8, (int) $max_visible );
+
 	// Bail if this is a visible item.
-	if ( (int) item_count() <= (int) $max_visible ) {
+	if ( $count <= $max_visible ) {
 		return $block_content;
 	}
 
@@ -175,11 +179,11 @@ function render_block_core_image( $block_content, $block, $instance ) {
 	}
 
 	// Get image source and srcset.
-	$src     = wp_get_attachment_image_url( $image_id, 'full' );
-	$srcset  = wp_get_attachment_image_srcset( $image_id, 'full' );
-	$sizes   = wp_get_attachment_image_sizes( $image_id, 'full' );
-	$alt     = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
-	$alt     = $alt ?: $block['attrs']['alt'] ?? '';
+	$src    = wp_get_attachment_image_url( $image_id, 'full' );
+	$srcset = wp_get_attachment_image_srcset( $image_id, 'full' );
+	$sizes  = wp_get_attachment_image_sizes( $image_id, 'full' );
+	$alt    = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+	$alt    = $alt ?: $block['attrs']['alt'] ?? '';
 
 	// Get caption from first figcaption element in the content if it exists, otherwise use attachment caption.
 	if ( preg_match( '/<figcaption[^>]*>(.*?)<\/figcaption>/is', $block_content, $matches ) ) {
