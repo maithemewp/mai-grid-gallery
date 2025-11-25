@@ -362,11 +362,13 @@ _block_block_json__WEBPACK_IMPORTED_MODULE_9__.icon = _wordpress_icons__WEBPACK_
     } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_6__.useDispatch)('core/block-editor');
     const innerBlocks = getBlocks(clientId);
     const hasInnerBlocks = innerBlocks.length > 0;
-    const maxVisible = attributes.maxVisible === 0 ? 8 : attributes.maxVisible;
+    const maxVisible = 0 === attributes.maxVisible ? 8 : attributes.maxVisible;
     const hasHiddenImages = maxVisible > 0 && innerBlocks.length > maxVisible;
-    console.log('maxVisible', maxVisible);
+
+    // For className: use maxVisible value if set, or 8 if default (0) and more than 8 blocks.
+    const visibleClassValue = attributes.maxVisible > 0 ? attributes.maxVisible : 0 === attributes.maxVisible && innerBlocks.length > 8 ? 8 : null;
     const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
-      className: [maxVisible ? `has-visible-${attributes.maxVisible}` : undefined, hasHiddenImages && !editorShowAll ? 'hide-extra-in-editor' : undefined].filter(Boolean).join(' ')
+      className: [visibleClassValue ? `has-visible-${visibleClassValue}` : undefined, hasHiddenImages && !editorShowAll ? 'hide-extra-in-editor' : undefined].filter(Boolean).join(' ')
     });
     const imageIds = innerBlocks.filter(block => block.attributes?.id).map(block => block.attributes.id);
     const hasImageIds = imageIds.length > 0;

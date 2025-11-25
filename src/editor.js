@@ -48,15 +48,20 @@ registerBlockType('mai/grid-gallery', {
 
 		const { insertBlocks, replaceInnerBlocks } = useDispatch('core/block-editor');
 
-		const innerBlocks = getBlocks(clientId);
-		const hasInnerBlocks = innerBlocks.length > 0;
-		const maxVisible = attributes.maxVisible || 0;
+		const innerBlocks     = getBlocks(clientId);
+		const hasInnerBlocks  = innerBlocks.length > 0;
+		const maxVisible      = 0 === attributes.maxVisible ? 8 : attributes.maxVisible;
 		const hasHiddenImages = maxVisible > 0 && innerBlocks.length > maxVisible;
+
+		// For className: use maxVisible value if set, or 8 if default (0) and more than 8 blocks.
+		const visibleClassValue = attributes.maxVisible > 0
+			? attributes.maxVisible
+			: (0 === attributes.maxVisible && innerBlocks.length > 8 ? 8 : null);
 
 		const blockProps = useBlockProps({
 			className: [
-				attributes.maxVisible && attributes.maxVisible > 0
-					? `has-visible-${attributes.maxVisible}`
+				visibleClassValue
+					? `has-visible-${visibleClassValue}`
 					: undefined,
 				hasHiddenImages && !editorShowAll
 					? 'hide-extra-in-editor'
