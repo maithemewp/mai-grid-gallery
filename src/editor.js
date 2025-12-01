@@ -11,8 +11,8 @@ import {
 	MediaPlaceholder,
 	MediaReplaceFlow,
 } from '@wordpress/block-editor';
-import { SelectControl, PanelBody, Toolbar,ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { gallery as icon, seen, unseen } from '@wordpress/icons';
+import { PanelBody, ToolbarGroup, ToolbarButton, RangeControl } from '@wordpress/components';
 import { createBlock } from '@wordpress/blocks';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
@@ -50,23 +50,13 @@ registerBlockType('mai/grid-gallery', {
 
 		const innerBlocks     = getBlocks(clientId);
 		const hasInnerBlocks  = innerBlocks.length > 0;
-		const maxVisible      = 0 === attributes.maxVisible ? 8 : attributes.maxVisible;
-		const hasHiddenImages = maxVisible > 0 && innerBlocks.length > maxVisible;
-
-		// For className: use maxVisible value if set, or 8 if default (0) and more than 8 blocks.
-		const visibleClassValue = attributes.maxVisible > 0
-			? attributes.maxVisible
-			: (0 === attributes.maxVisible && innerBlocks.length > 8 ? 8 : null);
-
-		const blockProps = useBlockProps({
-			className: [
-				visibleClassValue
-					? `has-visible-${visibleClassValue}`
-					: undefined,
-				hasHiddenImages && !editorShowAll
-					? 'hide-extra-in-editor'
-					: undefined,
-			].filter(Boolean).join(' '),
+		const visibleImages   = attributes.maxVisible ? attributes.maxVisible : Math.min(innerBlocks.length, 8);
+		const hasHiddenImages = innerBlocks.length > visibleImages;
+		const blockProps      = useBlockProps({
+			className: hasHiddenImages && !editorShowAll
+				? 'hide-extra-in-editor'
+				: undefined,
+			'data-visible': visibleImages,
 		});
 
 		const imageIds = innerBlocks
@@ -148,14 +138,14 @@ registerBlockType('mai/grid-gallery', {
 			)}
 				<InspectorControls>
 					<PanelBody title={__('Settings', 'mai-grid-gallery')}>
-						<SelectControl
+						<RangeControl
 							label={__('Max Visible Items', 'mai-grid-gallery')}
-							value={attributes.maxVisible?.toString() || '0'}
-							options={Array.from({ length: 9 }, (_, i) => ({
-								label: i === 0 ? __('Use image count (max 8)', 'mai-grid-gallery') : i.toString(),
-								value: i.toString()
-							}))}
-							onChange={(value) => setAttributes({ maxVisible: parseInt(value, 10) })}
+							value={attributes.maxVisible || 0}
+							onChange={(value) => setAttributes({ maxVisible: value || 0 })}
+							min={0}
+							max={8}
+							step={1}
+							help={__('Limit visible items to this number. Use 0 to use the number of images in the gallery (max 8 visible).', 'mai-grid-gallery')}
 						/>
 					</PanelBody>
 				</InspectorControls>
@@ -182,16 +172,20 @@ registerBlockType('mai/grid-gallery', {
 			</>
 		);
 	},
-	save: ({ attributes }) => {
-		const blockProps = useBlockProps.save({
-			className: attributes.maxVisible && attributes.maxVisible > 0
-				? `has-visible-${attributes.maxVisible}`
-				: undefined,
+	save: ({ attributes, innerBlocks }) => {
+		const visibleImages = attributes.maxVisible ? attributes.maxVisible : Math.min(innerBlocks.length, 8);
+		const blockProps    = useBlockProps.save({
+			'data-count': innerBlocks.length,
+			'data-visible': visibleImages,
 		});
 
 		return (
 			<div {...blockProps}>
 				<InnerBlocks.Content />
+				<span className="wp-block-mai-grid-gallery__badge">
+					<span className="wp-block-mai-grid-gallery__badge-icon"></span>
+					<span className="wp-block-mai-grid-gallery__badge-count">{innerBlocks.length}</span>
+				</span>
 			</div>
 		);
 	},

@@ -1,12 +1,23 @@
 .wp-block-mai-grid-gallery {
+	position: relative;
 	display: grid;
-	gap: 8px;
+	gap: var(--mai-grid-gallery-gap, 8px);
+	grid-template-columns: repeat(24,1fr);
+	grid-template-rows: repeat(12,1fr);
+	border-radius: var(--mai-grid-gallery-border-radius, var(--image-border-radius, var(--border-radius, 0)));
+	aspect-ratio: var(--mai-grid-gallery-aspect-ratio, 2/1);
+	overflow: hidden; /* for the badge radius */
+
+	> * {
+		grid-column: span 4 / auto;
+		grid-row: span 4 / auto
+	}
 
 	> :where(figure) {
 		width: 100%;
 		height: 100%;
 		margin: 0;
-		border-radius: var(--image-border-radius, var(--border-radius, 0));
+		border-radius: var(--mai-grid-gallery-border-radius, var(--image-border-radius, var(--border-radius, 0)));
 		overflow: hidden;
 
 		.components-resizable-box__container {
@@ -26,32 +37,8 @@
 		}
 	}
 
-	/**
-	 * We shouldn't be allowed to add links,but for now if someone does,
-	 * this will make sure it doesn't bork the styling.
-	 */
-	.wp-block-image a {
-		display: contents;
-	}
-
-	.components-resizable-box__handle  {
-		display: none !important;
-	}
-}
-
-.wp-block-mai-grid-gallery {
-	aspect-ratio: 2/1;
-	grid-template-columns: repeat(24,1fr);
-	grid-template-rows: repeat(12,1fr);
-
-	> * {
-		grid-column: span 4 / auto;
-		grid-row: span 4 / auto
-	}
-
 	/* 1 item */
-	&.has-visible-1,
-	&:not([class*="has-visible-"]):has(>:nth-of-type(1):last-of-type) {
+	&[data-visible="1"] {
 		>:first-of-type {
 			grid-column: span 24 / auto;
 			grid-row: span 12 / auto;
@@ -59,8 +46,7 @@
 	}
 
 	/* 2 items */
-	&.has-visible-2,
-	&:not([class*="has-visible-"]):has(>:nth-of-type(2):last-of-type) {
+	&[data-visible="2"] {
 		>:first-of-type,
 		>:nth-of-type(2) {
 			grid-column: span 12 / auto;
@@ -69,8 +55,7 @@
 	}
 
 	/* 3 items */
-	&.has-visible-3,
-	&:not([class*="has-visible-"]):has(>:nth-of-type(3):last-of-type) {
+	&[data-visible="3"] {
 		>:first-of-type,
 		>:nth-of-type(2),
 		>:nth-of-type(3) {
@@ -80,8 +65,7 @@
 	}
 
 	/* 4 items */
-	&.has-visible-4,
-	&:not([class*="has-visible-"]):has(>:nth-of-type(4):last-of-type) {
+	&[data-visible="4"] {
 		>:first-of-type {
 			grid-column: span 12 / auto;
 			grid-row: span 12 / auto;
@@ -100,8 +84,7 @@
 	}
 
 	/* 5 items */
-	&.has-visible-5,
-	&:not([class*="has-visible-"]):has(>:nth-of-type(5):last-of-type) {
+	&[data-visible="5"] {
 		>:first-of-type {
 			grid-column: span 12 / auto;
 			grid-row: span 12 / auto;
@@ -121,8 +104,7 @@
 	}
 
 	/* 6 items */
-	&.has-visible-6,
-	&:not([class*="has-visible-"]):has(>:nth-of-type(6):last-of-type) {
+	&[data-visible="6"] {
 		>:first-of-type {
 			grid-column: span 12 / auto;
 			grid-row: span 12 / auto;
@@ -143,8 +125,7 @@
 	}
 
 	/* 7 items */
-	&.has-visible-7,
-	&:not([class*="has-visible-"]):has(>:nth-of-type(7):last-of-type) {
+	&[data-visible="7"] {
 		>:first-of-type {
 			grid-column: span 8 / auto;
 			grid-row: span 12 / auto;
@@ -172,8 +153,9 @@
 	}
 
 	/* 8 items */
-	&.has-visible-8,
-	&:not([class*="has-visible-"]):has(>:nth-of-type(8):last-of-type) {
+	&:not([data-visible]),
+	&[data-visible="0"],
+	&[data-visible="8"] {
 		>:first-of-type {
 			grid-column: span 8 / auto;
 			grid-row: span 12 / auto;
@@ -194,4 +176,46 @@
 			grid-row: span 6 / auto;
 		}
 	}
+
+	/**
+	 * We shouldn't be allowed to add links,but for now if someone does,
+	 * this will make sure it doesn't bork the styling.
+	 */
+	 .wp-block-image a {
+		display: contents;
+	}
+
+	.components-resizable-box__handle  {
+		display: none !important;
+	}
+}
+
+.wp-block-mai-grid-gallery__badge {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	padding: 4px 8px;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 600;
+	border-top-right-radius: var(--mai-grid-gallery-border-radius, var(--image-border-radius, var(--border-radius, 0)));
+}
+
+.wp-block-mai-grid-gallery__badge-icon {
+	width: 16px;
+	height: 16px;
+	background-color: currentColor;
+	mask-image: var(--mai-grid-gallery-icon, url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath stroke="none" d="M0 0h24v24H0z" fill="none"/%3E%3Cpath d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" /%3E%3Cpath d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /%3E%3C/svg%3E'));
+	mask-size: contain;
+	mask-repeat: no-repeat;
+	mask-position: center;
+	flex-shrink: 0;
+}
+
+.wp-block-mai-grid-gallery__badge-count::before {
+	margin-inline: 2px;
+	content: '+';
 }
