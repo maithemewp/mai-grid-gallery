@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Mai Grid Gallery
  * Description:       A responsive, stylish, and lightweight grid gallery with lightbox support
- * Version:           0.1.0
+ * Version:           0.2.0
  * Requires at least: 6.7
  * Requires PHP:      8.2
  * Author:            BizBudding
@@ -111,14 +111,14 @@ function add_gallery_context_to_blocks_metadata( $metadata ) {
  * @return int
  */
 function item_count( $reset = false ) {
-	static $count = 1;
+	static $count = 0;
 	if ( $reset ) {
-		$count = 1;
+		$count = 0;
 	}
 	return $count++;
 }
 
-add_action( 'render_block_mai/grid-gallery', __NAMESPACE__ . '\render_block_mai_grid_gallery', 10, 3 );
+add_filter( 'render_block_mai/grid-gallery', __NAMESPACE__ . '\render_block_mai_grid_gallery', 10, 3 );
 /**
  * Renders the grid gallery block.
  *
@@ -138,7 +138,7 @@ function render_block_mai_grid_gallery( $block_content, $block, $instance ) {
 	return $block_content;
 }
 
-add_action( 'render_block_core/image', __NAMESPACE__ . '\render_block_core_image', 10, 3 );
+add_filter( 'render_block_core/image', __NAMESPACE__ . '\render_block_core_image', 10, 3 );
 /**
  * Renders the core image block.
  *
@@ -151,15 +151,12 @@ function render_block_core_image( $block_content, $block, $instance ) {
 		return $block_content;
 	}
 
-	// Bail if not in a gallery.
-	$max_visible = $instance->context['mai/grid-gallery/maxVisible'] ?? null;
-	if ( is_null( $max_visible ) ) {
-		return $block_content;
-	}
+	// Get max visible.
+	$max_visible = $instance->context['mai/grid-gallery/maxVisible'] ?? 0;
+	$max_visible = 0 === $max_visible ? 8 : $max_visible;
 
 	// Get current item.
-	$count       = item_count();
-	$max_visible = max( 8, (int) $max_visible );
+	$count = item_count();
 
 	// Bail if this is a visible item.
 	if ( $count <= $max_visible ) {
@@ -172,7 +169,7 @@ function render_block_core_image( $block_content, $block, $instance ) {
 		return '';
 	}
 
-	// Get attachment data.
+	// Bail if no post object.
 	$attachment = get_post( $image_id );
 	if ( ! $attachment ) {
 		return '';
@@ -198,6 +195,67 @@ function render_block_core_image( $block_content, $block, $instance ) {
 		esc_attr( $srcset ),
 		esc_attr( $sizes ),
 		esc_attr( $alt ),
+		esc_attr( $caption )
+	);
+
+	return $span;
+}
+
+add_filter( 'render_block_core/video', __NAMESPACE__ . '\render_block_core_video', 10, 3 );
+/**
+ * TODO: Make sure video block actually works with the plugin.
+ * Renders the core video block.
+ *
+ * @since 0.1.0
+ *
+ * @return void
+ */
+function render_block_core_video( $block_content, $block, $instance ) {
+	if ( ! isset( $instance->context ) ) {
+		return $block_content;
+	}
+
+	// Get max visible.
+	$max_visible = $instance->context['mai/grid-gallery/maxVisible'] ?? 0;
+	$max_visible = 0 === $max_visible ? 8 : $max_visible;
+
+	// Get current item.
+	$count = item_count();
+
+	// Bail if this is a visible item.
+	if ( $count <= $max_visible ) {
+		return $block_content;
+	}
+
+	// Remove video if no ID.
+	$video_id = $block['attrs']['id'] ?? null;
+	if ( is_null( $video_id ) ) {
+		return '';
+	}
+
+	// Bail if no post object.
+	$attachment = get_post( $video_id );
+	if ( ! $attachment ) {
+		return '';
+	}
+
+	// Bail if no source.
+	$src = wp_get_attachment_url( $video_id );
+	if ( ! $src ) {
+		return '';
+	}
+
+	// Get caption from first figcaption element in the content if it exists, otherwise use attachment caption.
+	$caption = '';
+	if ( preg_match( '/<figcaption[^>]*>(.*?)<\/figcaption>/is', $block_content, $matches ) ) {
+		$caption = wp_strip_all_tags( $matches[1] );
+	} elseif ( $video_id ) {
+		$caption = wp_get_attachment_caption( $video_id );
+	}
+
+	// Build span with data attributes for video.
+	$span = sprintf( '<span style="display:none!important;" class="mai-grid-gallery-hidden" data-src="%s" data-caption="%s"></span>',
+		esc_attr( $src ),
 		esc_attr( $caption )
 	);
 
