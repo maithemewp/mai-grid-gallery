@@ -24,6 +24,10 @@
 		"maxVisible": {
 			"type": "number",
 			"default": 0
+		},
+		"itemCount": {
+			"type": "number",
+			"default": 0
 		}
 	},
 	"editorScript": "file:../build/editor.js",

@@ -135,6 +135,12 @@ function render_block_mai_grid_gallery( $block_content, $block, $instance ) {
 		return '';
 	}
 
+	// Build badge.
+	$badge = sprintf( '<span class="wp-block-mai-grid-gallery__badge"><span class="wp-block-mai-grid-gallery__badge-icon"></span><span class="wp-block-mai-grid-gallery__badge-count">%s</span></span>', count( $block['innerBlocks'] ?? [] ) );
+
+	// Add badge before the last closing div.
+	$block_content = preg_replace( '/<\/div>$/', $badge . '</div>', $block_content, 1 );
+
 	return $block_content;
 }
 
