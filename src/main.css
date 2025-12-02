@@ -190,6 +190,16 @@
 	}
 }
 
+.wp-block-mai-grid-gallery-item {
+	cursor: pointer;
+	transition: opacity 0.2s ease-in-out;
+}
+
+.wp-block-mai-grid-gallery-item:hover,
+.wp-block-mai-grid-gallery-item:focus {
+	opacity: 0.8;
+}
+
 .wp-block-mai-grid-gallery__badge {
 	position: absolute;
 	bottom: 0;
