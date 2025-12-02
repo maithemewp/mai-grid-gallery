@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Mai Grid Gallery
  * Description:       A responsive, stylish, and lightweight grid gallery with lightbox support
- * Version:           0.4.3
+ * Version:           0.4.4
  * Requires at least: 6.7
  * Requires PHP:      8.2
  * Author:            BizBudding
