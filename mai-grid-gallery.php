@@ -29,7 +29,15 @@ add_action( 'init', __NAMESPACE__ . '\init' );
  * @return void
  */
 function init() {
-	register_block_type( __DIR__ . '/block' );
+	// Register parent block.
+	register_block_type( __DIR__ . '/block/grid-gallery', [
+		'render_callback' => __NAMESPACE__ . '\render_mai_grid_gallery',
+	] );
+
+	// Register child block.
+	register_block_type( __DIR__ . '/block/grid-gallery-item', [
+		'render_callback' => __NAMESPACE__ . '\render_mai_grid_gallery_item',
+	] );
 
 	// Localize the editor assets.
 	wp_localize_script(
@@ -39,30 +47,213 @@ function init() {
 			'pluginUrl' => plugin_dir_url(__FILE__)
 		]
 	);
-
 }
 
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\maybe_enqueue_styles' );
 /**
- * Enqueues the styles for the grid gallery block.
+ * Renders the grid gallery block.
  *
- * @since 0.1.0
+ * @since 0.3.0
  *
- * @return void
+ * @param array    $attributes Block attributes.
+ * @param string   $content    Block content.
+ * @param WP_Block $block      Block instance.
+ *
+ * @return string
  */
-function maybe_enqueue_styles() {
-	// Bail if not a single post/page.
-	if ( ! is_singular() ) {
-		return;
+function render_mai_grid_gallery( $attributes, $content, $block ) {
+	// Reset the item count.
+	item_count( true );
+
+	// Return empty string if there are no inner blocks.
+	if ( ! isset( $block->inner_blocks ) || empty( $block->inner_blocks ) ) {
+		return '';
 	}
 
-	// Bail if the page doesn't have the grid gallery block.
-	if ( ! has_block( 'mai/grid-gallery' ) ) {
-		return;
+	// Maybe enqueue the styles.
+	static $enqueued = false;
+	if ( ! $enqueued ) {
+		$styles_asset = include( plugin_dir_path( __FILE__ ) . 'build/styles.asset.php' );
+		$script_asset = include( plugin_dir_path( __FILE__ ) . 'build/front.asset.php' );
+
+		// Enqueue the styles.
+		wp_enqueue_style(
+			'mai-grid-gallery-styles',
+			plugins_url( 'build/styles.css', __FILE__ ),
+			$styles_asset['dependencies'],
+			$styles_asset['version']
+		);
+
+		// Enqueue the script.
+		wp_enqueue_script(
+			'mai-grid-gallery-front',
+			plugins_url( 'build/front.js', __FILE__ ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			[
+				'strategy'  => 'defer',
+				'in_footer' => false,
+			]
+		);
+
+		$enqueued = true;
 	}
 
-	// Enqueue the styles.
-	enqueue_styles();
+	// Set attributes.
+	$max_visible    = $attributes['maxVisible'] ?? 0;
+	$max_visible    = 0 === $max_visible ? 8 : $max_visible;
+	$block_count    = count( $block->inner_blocks );
+	$visible_images = min( $block_count, $max_visible ?: 8 );
+	$hidden_images  = $block_count - $visible_images;
+	$attributes     = [
+		'data-count'   => $block_count,
+		'data-visible' => $visible_images,
+	];
+
+	// Maybe add hidden images.
+	if ( $hidden_images > 0 ) {
+		$attributes['data-hidden'] = $hidden_images;
+	}
+
+	// Build wrapper attributes.
+	$wrapper_attributes = get_block_wrapper_attributes( $attributes );
+
+	// Render inner blocks.
+	$inner_content = '';
+	foreach ( $block->inner_blocks as $inner_block ) {
+		$inner_content .= $inner_block->render();
+	}
+
+	// Build badge.
+	$badge = '<span class="wp-block-mai-grid-gallery__badge"><span class="wp-block-mai-grid-gallery__badge-icon"></span>';
+		if ( $hidden_images > 0 ) {
+			$badge .= sprintf( '<span class="wp-block-mai-grid-gallery__badge-count">%s</span>', $hidden_images );
+		}
+	$badge .= '</span>';
+
+	// Render block.
+	return sprintf(
+		'<div %s>%s%s</div>',
+		$wrapper_attributes,
+		$inner_content,
+		$badge
+	);
+}
+
+/**
+ * Renders a grid gallery item block.
+ *
+ * @since 0.3.0
+ *
+ * @param array    $attributes Block attributes.
+ * @param string   $content    Block content.
+ * @param WP_Block $block      Block instance.
+ *
+ * @return string
+ */
+function render_mai_grid_gallery_item( $attributes, $content, $block ) {
+	$id       = $attributes['id'] ?? 0;
+	$url      = $attributes['url'] ?? '';
+	$url_full = $url;
+	$type     = $attributes['type'] ?? null;
+	$type     = $type ?: get_type( $id, $url );
+	$caption  = $attributes['caption'] ?? '';
+	$focal    = $attributes['focalPoint'] ?? [ 'x' => 0.5, 'y' => 0.5 ];
+
+	// Bail if no URL or type is not image or video.
+	if ( ! $url || ! $type || ! in_array( $type, [ 'image', 'video' ] ) ) {
+		return '';
+	}
+
+	// Get max visible from context.
+	$max_visible = $block->context['mai/grid-gallery/maxVisible'] ?? 0;
+	$max_visible = 0 === $max_visible ? 8 : $max_visible;
+
+	// Get current item count.
+	$count = item_count();
+
+	// If this item is beyond max visible, render as hidden data.
+	if ( $count > $max_visible ) {
+		// Get manual data for placeholder span.
+		switch ( $type ) {
+			case 'image':
+				if ( $id ) {
+					$src     = wp_get_attachment_image_url( $id, 'full' );
+					$srcset  = wp_get_attachment_image_srcset( $id, 'full' );
+					$sizes   = wp_get_attachment_image_sizes( $id, 'full' );
+					$alt     = get_post_meta( $id, '_wp_attachment_image_alt', true );
+					$caption = $caption ?: wp_get_attachment_caption( $id );
+				} else {
+					$src     = $url;
+					$srcset  = '';
+					$sizes   = '';
+					$alt     = '';
+					$caption = $caption ?: '';
+				}
+				break;
+			case 'video':
+				$src     = $url;
+				$srcset  = '';
+				$sizes   = '';
+				$alt     = '';
+				$caption = $caption ?: '';
+				break;
+		}
+
+		return sprintf( '<span style="display:none!important;" class="mai-grid-gallery-hidden" data-src="%s" data-srcset="%s" data-sizes="%s" data-alt="%s" data-caption="%s"></span>',
+			esc_attr( $src ),
+			esc_attr( $srcset ),
+			esc_attr( $sizes ),
+			esc_attr( $alt ),
+			esc_attr( $caption )
+		);
+	}
+
+	// Get data.
+	switch ( $type ) {
+		case 'image':
+			// Handle style.
+			$attr = [];
+			if ( 0.5 !== $focal['x'] || 0.5 !== $focal['y'] ) {
+				$attr['style'] = sprintf(
+					' style="--object-position:%s%% %s%%"',
+					$focal['x'] * 100,
+					$focal['y'] * 100
+				);
+			}
+
+			// Get inner HTML.
+			if ( $id ) {
+				$url_full         = wp_get_attachment_image_url( $id, 'full' );
+				$attr['data-src'] = $url_full;
+				$inner_html       = wp_get_attachment_image( $id, 'large', false, $attr );
+			} else {
+				$inner_html = sprintf( '<img src="%s" data-src="%s" alt="" style="%s" />', esc_url( $url ), esc_url( $url_full ), esc_attr( $attr['style'] ) );
+			}
+			break;
+		case 'video':
+			// Get inner HTML.
+			$inner_html = sprintf(
+				'<video src="%s" data-src="%s" autoplay muted loop playsinline></video>',
+				esc_url( $url ),
+				esc_url( $url )
+			);
+			break;
+	}
+
+	// Maybe add caption.
+	if ( ! empty( $caption ) ) {
+		$inner_html .= sprintf( '<figcaption>%s</figcaption>', wp_kses_post( $caption ) );
+	}
+
+	// Attributes.
+	$attr = [
+		'class' => 'wp-block-mai-grid-gallery-item--' . $type,
+	];
+
+	// Build HTML.
+	$html = sprintf( '<figure %s>%s</figure>', get_block_wrapper_attributes( $attr ), $inner_html );
+
+	return $html;
 }
 
 /**
@@ -80,27 +271,47 @@ function enqueue_styles() {
 	wp_enqueue_style( 'mai-grid-gallery-styles', plugin_dir_url(__FILE__) . 'build/styles.css', [], $ver );
 }
 
-
-add_filter( 'block_type_metadata', __NAMESPACE__ . '\add_gallery_context_to_blocks_metadata', 10, 1 );
 /**
- * Adds usesContext to core/image and core/video blocks.
+ * Gets the type of the item.
  *
- * @since 0.1.0
+ * @since 0.3.0
  *
- * @param array $metadata Block metadata.
- * @return array
+ * @param int    $id  The ID of the item.
+ * @param string $url The URL of the item.
+ *
+ * @return string
  */
-function add_gallery_context_to_blocks_metadata( $metadata ) {
-	// Bail if not a core/image or core/video block.
-	if ( ! isset( $metadata['name'] ) || ! in_array( $metadata['name'], [ 'core/image', 'core/video' ], true ) ) {
-		return $metadata;
+function get_type( $id, $url = '' ) {
+	$type = null;
+
+	// Check if id is an attachment.
+	if ( $id ) {
+		$mime = get_post_mime_type( $id );
+
+		// Check if mime is image or video.
+		if ( str_starts_with( $mime, 'image/' ) ) {
+			$type = 'image';
+		}
+		elseif ( str_starts_with( $mime, 'video/' ) ) {
+			$type = 'video';
+		}
 	}
 
-	// Add the context to the block.
-	$metadata['usesContext']   = $metadata['usesContext'] ?? [];
-	$metadata['usesContext'][] = 'mai/grid-gallery/maxVisible';
+	// If no type and we have a url.
+	if ( ! $type && $url ) {
+		$ext        = strtolower( wp_parse_url( $url, PHP_URL_PATH ) );
+		$image_exts = [ 'jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'heic', 'svg' ];
+		$video_exts = [ 'mp4', 'mov', 'webm', 'avi', 'mkv', 'm4v' ];
 
-	return $metadata;
+		if ( in_array( $ext, $image_exts, true ) ) {
+			$type = 'image';
+		}
+		elseif ( in_array( $ext, $video_exts, true ) ) {
+			$type = 'video';
+		}
+	}
+
+	return $type;
 }
 
 /**
@@ -116,156 +327,6 @@ function item_count( $reset = false ) {
 		$count = 0;
 	}
 	return $count++;
-}
-
-add_filter( 'render_block_mai/grid-gallery', __NAMESPACE__ . '\render_block_mai_grid_gallery', 10, 3 );
-/**
- * Renders the grid gallery block.
- *
- * @since 0.1.0
- *
- * @return void
- */
-function render_block_mai_grid_gallery( $block_content, $block, $instance ) {
-	// Reset the item count.
-	item_count( true );
-
-	// Return empty string if there are no inner blocks.
-	if ( ! isset( $block['innerBlocks'] ) || empty( $block['innerBlocks'] ) ) {
-		return '';
-	}
-
-	// Build badge.
-	$badge = sprintf( '<span class="wp-block-mai-grid-gallery__badge"><span class="wp-block-mai-grid-gallery__badge-icon"></span><span class="wp-block-mai-grid-gallery__badge-count">%s</span></span>', count( $block['innerBlocks'] ?? [] ) );
-
-	// Add badge before the last closing div.
-	$block_content = preg_replace( '/<\/div>$/', $badge . '</div>', $block_content, 1 );
-
-	return $block_content;
-}
-
-add_filter( 'render_block_core/image', __NAMESPACE__ . '\render_block_core_image', 10, 3 );
-/**
- * Renders the core image block.
- *
- * @since 0.1.0
- *
- * @return void
- */
-function render_block_core_image( $block_content, $block, $instance ) {
-	if ( ! isset( $instance->context ) ) {
-		return $block_content;
-	}
-
-	// Get max visible.
-	$max_visible = $instance->context['mai/grid-gallery/maxVisible'] ?? 0;
-	$max_visible = 0 === $max_visible ? 8 : $max_visible;
-
-	// Get current item.
-	$count = item_count();
-
-	// Bail if this is a visible item.
-	if ( $count <= $max_visible ) {
-		return $block_content;
-	}
-
-	// Remove image if no ID.
-	$image_id = $block['attrs']['id'] ?? null;
-	if ( is_null( $image_id ) ) {
-		return '';
-	}
-
-	// Bail if no post object.
-	$attachment = get_post( $image_id );
-	if ( ! $attachment ) {
-		return '';
-	}
-
-	// Get image source and srcset.
-	$src    = wp_get_attachment_image_url( $image_id, 'full' );
-	$srcset = wp_get_attachment_image_srcset( $image_id, 'full' );
-	$sizes  = wp_get_attachment_image_sizes( $image_id, 'full' );
-	$alt    = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
-	$alt    = $alt ?: $block['attrs']['alt'] ?? '';
-
-	// Get caption from first figcaption element in the content if it exists, otherwise use attachment caption.
-	if ( preg_match( '/<figcaption[^>]*>(.*?)<\/figcaption>/is', $block_content, $matches ) ) {
-		$caption = wp_strip_all_tags( $matches[1] );
-	} else {
-		$caption = wp_get_attachment_caption( $image_id );
-	}
-
-	// Build span with data attributes.
-	$span = sprintf( '<span style="display:none!important;" class="mai-grid-gallery-hidden" data-src="%s" data-srcset="%s" data-sizes="%s" data-alt="%s" data-caption="%s"></span>',
-		esc_attr( $src ),
-		esc_attr( $srcset ),
-		esc_attr( $sizes ),
-		esc_attr( $alt ),
-		esc_attr( $caption )
-	);
-
-	return $span;
-}
-
-add_filter( 'render_block_core/video', __NAMESPACE__ . '\render_block_core_video', 10, 3 );
-/**
- * TODO: Make sure video block actually works with the plugin.
- * Renders the core video block.
- *
- * @since 0.1.0
- *
- * @return void
- */
-function render_block_core_video( $block_content, $block, $instance ) {
-	if ( ! isset( $instance->context ) ) {
-		return $block_content;
-	}
-
-	// Get max visible.
-	$max_visible = $instance->context['mai/grid-gallery/maxVisible'] ?? 0;
-	$max_visible = 0 === $max_visible ? 8 : $max_visible;
-
-	// Get current item.
-	$count = item_count();
-
-	// Bail if this is a visible item.
-	if ( $count <= $max_visible ) {
-		return $block_content;
-	}
-
-	// Remove video if no ID.
-	$video_id = $block['attrs']['id'] ?? null;
-	if ( is_null( $video_id ) ) {
-		return '';
-	}
-
-	// Bail if no post object.
-	$attachment = get_post( $video_id );
-	if ( ! $attachment ) {
-		return '';
-	}
-
-	// Bail if no source.
-	$src = wp_get_attachment_url( $video_id );
-	if ( ! $src ) {
-		return '';
-	}
-
-	// Get caption from first figcaption element in the content if it exists, otherwise use attachment caption.
-	$caption = '';
-	if ( preg_match( '/<figcaption[^>]*>(.*?)<\/figcaption>/is', $block_content, $matches ) ) {
-		$caption = wp_strip_all_tags( $matches[1] );
-	} elseif ( $video_id ) {
-		$caption = wp_get_attachment_caption( $video_id );
-	}
-
-	// Build span with data attributes for video.
-	$span = sprintf( '<span style="display:none!important;" class="mai-grid-gallery-hidden" data-src="%s" data-caption="%s"></span>',
-		esc_attr( $src ),
-		esc_attr( $caption )
-	);
-
-	return $span;
 }
 
 add_action( 'plugins_loaded', __NAMESPACE__ . '\updater' );

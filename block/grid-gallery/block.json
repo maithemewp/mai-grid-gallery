@@ -17,20 +17,11 @@
 		"mai/grid-gallery/maxVisible": "maxVisible"
 	},
 	"attributes": {
-		"focalPoints": {
-			"type": "object",
-			"default": {}
-		},
 		"maxVisible": {
-			"type": "number",
-			"default": 0
-		},
-		"itemCount": {
 			"type": "number",
 			"default": 0
 		}
 	},
-	"editorScript": "file:../build/editor.js",
-	"editorStyle": "file:../build/editor-styles.css",
-	"viewScript": "file:../build/frontend.js"
+	"editorScript": "file:../../build/editor.js",
+	"editorStyle": "file:../../build/editor-styles.css"
 }

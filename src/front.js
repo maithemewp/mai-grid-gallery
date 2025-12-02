@@ -46,7 +46,12 @@ function initializeGridGallery() {
 			}
 
 			return {
-				href: media.src,
+				height: media.height || '600',
+				width: media.width || '800',
+				href: media.dataset.src,
+				srcset: media.srcset,
+				sizes: media.sizes,
+				alt: media.alt,
 				description: description ? description.textContent : '',
 			};
 		}).filter(Boolean);
@@ -93,8 +98,22 @@ function initializeGridGallery() {
 		// Add slide information to each slide.
 		lightbox.on('slide_before_load', (data) => {
 			const { slideIndex, slideNode } = data;
-			slideNode.dataset.slideIndex    = slideIndex + 1;
-			slideNode.dataset.totalSlides   = elements.length;
+			slideNode.dataset.slideIndex  = slideIndex + 1;
+			slideNode.dataset.totalSlides = elements.length;
+		});
+
+		// Set width/height of image after it is loaded.
+		// We hit weirdness with WP's `img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }`
+		lightbox.on('slide_after_load', (data) => {
+			const img = data.slideNode.querySelector('img');
+			if ( img ) {
+				if ( ! img.getAttribute('width') ) {
+					img.setAttribute('width', img.naturalWidth);
+				}
+				if ( ! img.getAttribute('height') ) {
+					img.setAttribute('height', img.naturalHeight);
+				}
+			}
 		});
 
 		// Store lightbox instance for cleanup.
@@ -102,7 +121,6 @@ function initializeGridGallery() {
 
 		// Add click handlers to gallery items.
 		galleryEl.querySelectorAll('figure').forEach((figure, index) => {
-			figure.style.cursor = 'pointer';
 			figure.addEventListener('click', (e) => {
 				e.preventDefault();
 				lightbox.openAt(index);

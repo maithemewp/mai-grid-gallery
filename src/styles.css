@@ -1,6 +1,10 @@
 @import 'glightbox/dist/css/glightbox.min.css';
 @import './main.css';
 
+/* .gslide-image img {
+	contain-intrinsic-size: unset !important;
+} */
+
 .gbtn {
 	padding: 0 !important;
 	border-radius: var(--button-border-radius, var(--border-radius, 3px)) !important;

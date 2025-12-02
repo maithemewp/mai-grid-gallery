@@ -1,0 +1,42 @@
+{
+	"apiVersion": 3,
+	"name": "mai/grid-gallery-item",
+	"title": "Grid Gallery Item",
+	"description": "A single media item within a grid gallery",
+	"category": "media",
+	"parent": ["mai/grid-gallery"],
+	"textdomain": "mai-grid-gallery",
+	"supports": {
+		"html": false,
+		"reusable": false
+	},
+	"usesContext": ["mai/grid-gallery/maxVisible"],
+	"attributes": {
+		"id": {
+			"type": "number"
+		},
+		"url": {
+			"type": "string"
+		},
+		"type": {
+			"type": "string",
+			"enum": ["image", "video"]
+		},
+		"alt": {
+			"type": "string",
+			"default": ""
+		},
+		"caption": {
+			"type": "string",
+			"source": "html",
+			"selector": "figcaption"
+		},
+		"focalPoint": {
+			"type": "object",
+			"default": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	}
+}

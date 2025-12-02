@@ -90,7 +90,7 @@
 	}
 }
 
-.wp-block-mai-grid-gallery[data-count]::after {
+.wp-block-mai-grid-gallery[data-hidden]::after {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -102,5 +102,5 @@
 	font-size: 12px;
 	font-weight: 600;
 	border-top-right-radius: var(--mai-grid-gallery-border-radius, var(--image-border-radius, var(--border-radius, 0)));
-	content: '+ ' attr(data-count);
+	content: '+ ' attr(data-hidden);
 }

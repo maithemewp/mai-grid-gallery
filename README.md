@@ -62,12 +62,12 @@ mai-grid-gallery/
 ├── build/              # Compiled assets (generated)
 │   ├── editor.js       # Editor JavaScript
 │   ├── editor-styles.css
-│   ├── frontend.js     # Frontend JavaScript
+│   ├── front.js     # Frontend JavaScript
 │   └── styles.css      # Frontend styles
 ├── src/                # Source files
 │   ├── editor.js       # Block editor implementation
 │   ├── editor-styles.css
-│   ├── frontend.js     # Frontend functionality (lightbox)
+│   ├── front.js     # Frontend functionality (lightbox)
 │   ├── main.css        # Main styles
 │   └── styles.css      # Additional styles
 ├── mai-grid-gallery.php  # Main plugin file
