@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { registerBlockType } from '@wordpress/blocks';
+import { registerBlockType, createBlock } from '@wordpress/blocks';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
@@ -13,9 +13,8 @@ import {
 } from '@wordpress/block-editor';
 import { gallery as icon, seen, unseen } from '@wordpress/icons';
 import { PanelBody, ToolbarGroup, ToolbarButton, RangeControl } from '@wordpress/components';
-import { createBlock } from '@wordpress/blocks';
 import { useState } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useSelect, useDispatch, select } from '@wordpress/data';
 import { View } from '@wordpress/primitives';
 import { __ } from '@wordpress/i18n';
 
@@ -187,5 +186,107 @@ registerBlockType('mai/grid-gallery', {
 				<InnerBlocks.Content />
 			</div>
 		);
+	},
+	transforms: {
+		from: [
+			{
+				type: 'block',
+				blocks: ['core/gallery'],
+				transform: (attributes, innerBlocks) => {
+					// Handle newer gallery format with inner blocks (wp:image blocks).
+					if (innerBlocks && innerBlocks.length > 0) {
+						const coreSelect = select('core');
+						const transformedBlocks = innerBlocks
+							.map((block) => {
+								// Extract image data from core/image block.
+								const imageAttrs = block.attributes || {};
+								const imageId = imageAttrs.id;
+
+								if (!imageId) {
+									return null;
+								}
+
+								// Get media data from the core store.
+								const media = coreSelect.getMedia(imageId);
+								if (!media) {
+									// Fallback: use attributes from the image block if media not in store.
+									return createBlock('mai/grid-gallery-item', {
+										id: imageId,
+										url: imageAttrs.url || '',
+										type: 'image',
+										alt: imageAttrs.alt || '',
+										caption: imageAttrs.caption || '',
+									});
+								}
+
+								// Get the full size URL.
+								const url = media.source_url || media.media_details?.sizes?.full?.source_url || media.url || '';
+
+								// Get caption - handle both object and string formats.
+								let caption = '';
+								if (media.caption) {
+									caption = typeof media.caption === 'string' ? media.caption : media.caption.raw || '';
+								}
+
+								return createBlock('mai/grid-gallery-item', {
+									id: media.id,
+									url: url,
+									type: 'image',
+									alt: media.alt_text || '',
+									caption: caption,
+								});
+							})
+							.filter(Boolean); // Remove any null entries.
+
+						// Return empty gallery if no valid images.
+						if (transformedBlocks.length === 0) {
+							return createBlock('mai/grid-gallery', {});
+						}
+
+						// Create the grid gallery block with inner blocks.
+						return createBlock('mai/grid-gallery', {}, transformedBlocks);
+					}
+
+					// Fallback: Handle older gallery format with ids attribute.
+					const { ids } = attributes;
+
+					// Return empty gallery if no images.
+					if (!ids || ids.length === 0) {
+						return createBlock('mai/grid-gallery', {});
+					}
+
+					// Get media data for each image ID.
+					const coreSelect = select('core');
+					const transformedBlocks = ids
+						.map((id) => {
+							const media = coreSelect.getMedia(id);
+							if (!media) {
+								return null;
+							}
+
+							// Get the full size URL.
+							const url = media.source_url || media.media_details?.sizes?.full?.source_url || media.url || '';
+
+							// Get caption - handle both object and string formats.
+							let caption = '';
+							if (media.caption) {
+								caption = typeof media.caption === 'string' ? media.caption : media.caption.raw || '';
+							}
+
+							return createBlock('mai/grid-gallery-item', {
+								id: media.id,
+								url: url,
+								type: 'image',
+								alt: media.alt_text || '',
+								caption: caption,
+							});
+						})
+						.filter(Boolean); // Remove any null entries.
+
+					// Create the grid gallery block with inner blocks.
+					return createBlock('mai/grid-gallery', {}, transformedBlocks);
+				},
+			},
+		],
 	},
 });

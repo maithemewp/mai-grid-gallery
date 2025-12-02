@@ -157,6 +157,7 @@ function render_mai_grid_gallery_item( $attributes, $content, $block ) {
 	$type     = $attributes['type'] ?? null;
 	$type     = $type ?: get_type( $id, $url );
 	$caption  = $attributes['caption'] ?? '';
+	$caption  = empty( $caption ) && $id ? wp_get_attachment_caption( $id ) : '';
 	$focal    = $attributes['focalPoint'] ?? [ 'x' => 0.5, 'y' => 0.5 ];
 
 	// Bail if no URL or type is not image or video.
@@ -181,7 +182,7 @@ function render_mai_grid_gallery_item( $attributes, $content, $block ) {
 					$srcset  = wp_get_attachment_image_srcset( $id, 'full' );
 					$sizes   = wp_get_attachment_image_sizes( $id, 'full' );
 					$alt     = get_post_meta( $id, '_wp_attachment_image_alt', true );
-					$caption = $caption ?: wp_get_attachment_caption( $id );
+					$caption = $caption ?: '';
 				} else {
 					$src     = $url;
 					$srcset  = '';

@@ -142,7 +142,7 @@ function initializeGridGallery() {
         srcset: media.srcset,
         sizes: media.sizes,
         alt: media.alt,
-        description: description ? description.textContent : ''
+        description: description ? description.textContent.trim() : ''
       };
     }).filter(Boolean);
 
