@@ -235,27 +235,107 @@ function Edit({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/upload.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./block.json */ "./block/grid-gallery-item/block.json");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./block/grid-gallery-item/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./block/grid-gallery-item/save.js");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/upload.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./block.json */ "./block/grid-gallery-item/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./block/grid-gallery-item/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./save */ "./block/grid-gallery-item/save.js");
 /**
- * WordPress dependencies
+ * WordPress dependencies.
  */
 
 
 
+
 /**
- * Internal dependencies
+ * Internal dependencies.
  */
 
 
 
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_1__.name, {
-  ..._block_json__WEBPACK_IMPORTED_MODULE_1__,
-  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
-  edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
-  save: _save__WEBPACK_IMPORTED_MODULE_3__["default"]
+
+/**
+ * Register the Grid Gallery Item block.
+ * This block represents a single image or video within a grid gallery.
+ */
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_2__.name, {
+  ..._block_json__WEBPACK_IMPORTED_MODULE_2__,
+  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+  edit: _edit__WEBPACK_IMPORTED_MODULE_3__["default"],
+  save: _save__WEBPACK_IMPORTED_MODULE_4__["default"],
+  /**
+   * Block transforms configuration.
+   * Allows converting core/image blocks to gallery item blocks.
+   */
+  transforms: {
+    from: [{
+      type: 'block',
+      blocks: ['core/image'],
+      /**
+       * Transform function to convert core/image blocks to mai/grid-gallery-item.
+       * Extracts image data from the image block and creates a gallery item block.
+       *
+       * @param {Object} attributes - The core/image block attributes.
+       * @return {Object} A new mai/grid-gallery-item block.
+       */
+      transform: attributes => {
+        /**
+         * Get the image ID from the block attributes.
+         * This is the WordPress attachment ID.
+         */
+        const imageId = attributes.id;
+
+        /**
+         * If we have an image ID, try to get full media data from the core store.
+         * This provides the full-size URL and other metadata.
+         */
+        if (imageId) {
+          const coreSelect = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)('core');
+          const media = coreSelect.getMedia(imageId);
+          if (media) {
+            /**
+             * Get the full size image URL.
+             * Try multiple possible URL locations in the media object.
+             */
+            const url = media.source_url || media.media_details?.sizes?.full?.source_url || media.url || '';
+
+            /**
+             * Get caption - handle both object and string formats.
+             * WordPress media captions can be stored as objects with a 'raw' property or as plain strings.
+             */
+            let caption = '';
+            if (media.caption) {
+              caption = typeof media.caption === 'string' ? media.caption : media.caption.raw || '';
+            }
+
+            /**
+             * Create gallery item block with media data from the store.
+             */
+            return (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.createBlock)('mai/grid-gallery-item', {
+              id: media.id,
+              url: url,
+              type: 'image',
+              alt: media.alt_text || attributes.alt || '',
+              caption: caption || attributes.caption || ''
+            });
+          }
+        }
+
+        /**
+         * Fallback: Create gallery item block using attributes from the image block.
+        * This handles cases where media isn't in the store or there's no attachment ID.
+        */
+        return (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.createBlock)('mai/grid-gallery-item', {
+          id: imageId || 0,
+          url: attributes.url || '',
+          type: 'image',
+          alt: attributes.alt || '',
+          caption: attributes.caption || ''
+        });
+      }
+    }]
+  }
 });
 
 /***/ }),

@@ -204,15 +204,16 @@
 	padding: 4px;
 	background-color: rgba(0, 0, 0, 0.6);
 	color: #fff;
-	font-size: 12px;
+	font-size: 1rem;
 	font-weight: 600;
+	line-height: 1;
 	border-top-right-radius: var(--mai-grid-gallery-border-radius, var(--image-border-radius, var(--border-radius, 0)));
 }
 
 .wp-block-mai-grid-gallery__badge-icon {
 	flex-shrink: 0;
-	width: 16px;
-	height: 16px;
+	width: 1rem;
+	height: 1rem;
 	background-color: currentColor;
 	-webkit-mask-image: var(--mai-grid-gallery-icon, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.5%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath stroke=%27none%27 d=%27M0 0h24v24H0z%27 fill=%27none%27/%3E%3Cpath d=%27M4 8v-2a2 2 0 0 1 2 -2h2%27 /%3E%3Cpath d=%27M4 16v2a2 2 0 0 0 2 2h2%27 /%3E%3Cpath d=%27M16 4h2a2 2 0 0 1 2 2v2%27 /%3E%3Cpath d=%27M16 20h2a2 2 0 0 0 2 -2v-2%27 /%3E%3Cpath d=%27M8 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0%27 /%3E%3Cpath d=%27M16 16l-2.5 -2.5%27 /%3E%3C/svg%3E"));
 	        mask-image: var(--mai-grid-gallery-icon, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.5%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath stroke=%27none%27 d=%27M0 0h24v24H0z%27 fill=%27none%27/%3E%3Cpath d=%27M4 8v-2a2 2 0 0 1 2 -2h2%27 /%3E%3Cpath d=%27M4 16v2a2 2 0 0 0 2 2h2%27 /%3E%3Cpath d=%27M16 4h2a2 2 0 0 1 2 2v2%27 /%3E%3Cpath d=%27M16 20h2a2 2 0 0 0 2 -2v-2%27 /%3E%3Cpath d=%27M8 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0%27 /%3E%3Cpath d=%27M16 16l-2.5 -2.5%27 /%3E%3C/svg%3E"));
