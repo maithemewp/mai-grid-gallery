@@ -3,12 +3,12 @@
  */
 import { useBlockProps, MediaReplaceFlow, InspectorControls, BlockControls, RichText } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { Placeholder, ToolbarGroup, ToolbarButton, FocalPointPicker } from '@wordpress/components';
+import { Placeholder, ToolbarGroup, ToolbarButton, FocalPointPicker, ToggleControl, PanelBody } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import { upload as icon, caption as captionIcon } from '@wordpress/icons';
 
 export default function Edit({ attributes, setAttributes }) {
-	const { id, url, type, alt, caption, focalPoint } = attributes;
+	const { id, url, type, alt, caption, focalPoint, autoplay } = attributes;
 	const [localFocalPoint, setLocalFocalPoint] = useState(focalPoint);
 	const [showCaption, setShowCaption] = useState(!!caption);
 
@@ -132,8 +132,8 @@ export default function Edit({ attributes, setAttributes }) {
 				</ToolbarGroup>
 			</BlockControls>
 
-			{'image' === effectiveType && url && (
-				<InspectorControls>
+			<InspectorControls>
+				{'image' === effectiveType && url && (
 					<div style={{ padding: '0 16px 16px' }}>
 						<FocalPointPicker
 							__nextHasNoMarginBottom
@@ -145,8 +145,18 @@ export default function Edit({ attributes, setAttributes }) {
 							onChange={handleFocalPointChange}
 						/>
 					</div>
-				</InspectorControls>
-			)}
+				)}
+				{'video' === effectiveType && url && (
+					<PanelBody title={__('Video Settings', 'mai-grid-gallery')}>
+						<ToggleControl
+							label={__('Autoplay', 'mai-grid-gallery')}
+							checked={autoplay || false}
+							onChange={(value) => setAttributes({ autoplay: value })}
+							help={__('Video will always be muted and loop when autoplay is enabled.', 'mai-grid-gallery')}
+						/>
+					</PanelBody>
+				)}
+			</InspectorControls>
 
 			<figure {...blockProps}>
 				{'image' === effectiveType ? (
@@ -158,7 +168,13 @@ export default function Edit({ attributes, setAttributes }) {
 						}}
 					/>
 				) : (
-					<video src={url} autoPlay playsInline muted loop />
+					<video
+						src={url}
+						{...(autoplay ? { autoPlay: true } : {})}
+						playsInline
+						muted
+						loop
+					/>
 				)}
 				{showCaption && (
 					<RichText

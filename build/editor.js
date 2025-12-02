@@ -8,7 +8,7 @@
   \********************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"mai/grid-gallery-item","title":"Grid Gallery Item","description":"A single media item within a grid gallery","category":"media","parent":["mai/grid-gallery"],"textdomain":"mai-grid-gallery","supports":{"html":false,"reusable":false},"usesContext":["mai/grid-gallery/maxVisible"],"attributes":{"id":{"type":"number"},"url":{"type":"string"},"type":{"type":"string","enum":["image","video"]},"alt":{"type":"string","default":""},"caption":{"type":"string","source":"html","selector":"figcaption"},"focalPoint":{"type":"object","default":{"x":0.5,"y":0.5}}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"mai/grid-gallery-item","title":"Grid Gallery Item","description":"A single media item within a grid gallery","category":"media","parent":["mai/grid-gallery"],"textdomain":"mai-grid-gallery","supports":{"html":false,"reusable":false},"usesContext":["mai/grid-gallery/maxVisible"],"attributes":{"id":{"type":"number"},"url":{"type":"string"},"type":{"type":"string","enum":["image","video"]},"alt":{"type":"string","default":""},"caption":{"type":"string","source":"html","selector":"figcaption"},"focalPoint":{"type":"object","default":{"x":0.5,"y":0.5}},"autoplay":{"type":"boolean","default":false}}}');
 
 /***/ }),
 
@@ -53,7 +53,8 @@ function Edit({
     type,
     alt,
     caption,
-    focalPoint
+    focalPoint,
+    autoplay
   } = attributes;
   const [localFocalPoint, setLocalFocalPoint] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(focalPoint);
   const [showCaption, setShowCaption] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(!!caption);
@@ -169,8 +170,8 @@ function Edit({
           isPressed: showCaption
         })
       })]
-    }), 'image' === effectiveType && url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.InspectorControls, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.InspectorControls, {
+      children: ['image' === effectiveType && url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         style: {
           padding: '0 16px 16px'
         },
@@ -183,7 +184,17 @@ function Edit({
           onDrag: handleFocalPointChange,
           onChange: handleFocalPointChange
         })
-      })
+      }), 'video' === effectiveType && url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Video Settings', 'mai-grid-gallery'),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Autoplay', 'mai-grid-gallery'),
+          checked: autoplay || false,
+          onChange: value => setAttributes({
+            autoplay: value
+          }),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Video will always be muted and loop when autoplay is enabled.', 'mai-grid-gallery')
+        })
+      })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("figure", {
       ...blockProps,
       children: ['image' === effectiveType ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
@@ -194,7 +205,9 @@ function Edit({
         }
       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("video", {
         src: url,
-        autoPlay: true,
+        ...(autoplay ? {
+          autoPlay: true
+        } : {}),
         playsInline: true,
         muted: true,
         loop: true

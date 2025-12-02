@@ -231,11 +231,16 @@ function render_mai_grid_gallery_item( $attributes, $content, $block ) {
 			}
 			break;
 		case 'video':
+			// Get autoplay attribute.
+			$autoplay = $attributes['autoplay'] ?? false;
+			$autoplay_attr = $autoplay ? ' autoplay' : '';
+
 			// Get inner HTML.
 			$inner_html = sprintf(
-				'<video src="%s" data-src="%s" autoplay muted loop playsinline></video>',
+				'<video src="%s" data-src="%s"%s muted loop playsinline></video>',
 				esc_url( $url ),
-				esc_url( $url )
+				esc_url( $url ),
+				$autoplay_attr
 			);
 			break;
 	}
