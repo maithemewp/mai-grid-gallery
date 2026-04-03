@@ -158,6 +158,7 @@ function render_mai_grid_gallery_item( $attributes, $content, $block ) {
 	$type     = $type ?: get_type( $id, $url );
 	$caption  = $attributes['caption'] ?? '';
 	$caption  = empty( $caption ) && $id ? wp_get_attachment_caption( $id ) : '';
+	$caption  = apply_filters( 'mai_grid_gallery_caption', $caption, $id );
 	$focal    = $attributes['focalPoint'] ?? [ 'x' => 0.5, 'y' => 0.5 ];
 
 	// Bail if no URL or type is not image or video.
