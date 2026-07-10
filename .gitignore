@@ -13,3 +13,16 @@
 # Logs
 *.log
 npm-debug.log*
+
+# Composer: vendor/ committed (prod-only, --no-dev) so plugin-install zips work
+# without composer install. Allowlist: ignore everything under vendor/ except the
+# autoloader, composer's files, and each committed prod package.
+/vendor/*
+!/vendor/autoload.php
+!/vendor/composer/
+!/vendor/yahnis-elsts/
+# installed.php churns with the git ref + is never read at runtime; installed.json is the record.
+/vendor/composer/installed.php
+
+# deployable-guard hook (dev-only; regenerated on install).
+.githooks/
